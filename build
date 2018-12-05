@@ -1,0 +1,26 @@
+#!/bin/bash
+
+set -ex
+
+cd base
+docker build -t plicease/ciperl-base .
+cd ..
+
+for VERSION in 5.28.1 5.26.3 5.24.4 5.22.4 5.20.3 ; do
+
+  mkdir -p versions/$VERSION
+  sed "s/#PERL_VERSION#/$VERSION/g" < rc/Dockerfile.template > versions/$VERSION/Dockerfile
+
+done
+
+cd versions
+for TAG in * ; do
+
+  cd $TAG
+  cp ../../rc/*-wrapper .
+  docker build -t plicease/ciperl:"$TAG" .
+  rm -f *-wrapper
+  cd ..
+
+done
+cd ..
