@@ -1,0 +1,20 @@
+FROM plicease/ciperl-base:latest
+LABEL maintainer="Graham Ollis <plicease@cpan.org>"
+
+RUN curl https://raw.githubusercontent.com/tokuhirom/Perl-Build/master/perl-build | perl - #PERL_VERSION# /opt/perl/#PERL_VERSION#/ -Dusedevel
+RUN curl https://cpanmin.us | /opt/perl/#PERL_VERSION#/bin/perl#PERL_VERSION# - App::cpanminus && rm -rf ~/.cpanm
+RUN /opt/perl/5.29.5/bin/cpanm -n -L /opt/refileutils App::RegexFileUtils
+ADD rc/reln-wrapper /opt/refileutils/bin/reln-wrapper
+RUN chmod +x /opt/refileutils/bin/reln-wrapper
+RUN ln -s /opt/refileutils/bin/reln-wrapper /opt/perl/#PERL_VERSION#/bin/reln
+ENV PATH /opt/perl/#PERL_VERSION#/bin:$PATH
+RUN bash -c 'cd /opt/perl/#PERL_VERSION#/bin; reln -s "s/#PERL_VERSION#$//"'
+
+RUN cpanm -n -L /opt/dzil Dist::Zilla && rm -rf ~/.cpanm
+RUN cpanm -n -L /opt/dzil Dist::Zilla::PluginBundle::Author::Plicease && rm -rf ~/.cpanm
+RUN cpanm -n -L /opt/dzil App::af && rm -rf ~/.cpanm
+
+ADD rc/dzil-cpanm /opt/perl/#PERL_VERSION#/bin
+ADD rc/dzil-dzil  /opt/perl/#PERL_VERSION#/bin
+ADD rc/dzil-af    /opt/perl/#PERL_VERSION#/bin
+RUN chmod +x /opt/perl/#PERL_VERSION#/bin/dzil-*

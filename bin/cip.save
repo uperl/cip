@@ -1,0 +1,89 @@
+#!/bin/bash
+
+set -e 
+
+if [ "x$CIP_TAG" == "x" ]; then
+  export CIP_TAG=default
+fi
+
+if [ "x$1" == "x" ]; then
+  echo usage
+  exit 2
+fi
+
+export CIP_COMP=$(basename $(pwd))
+export CIP_CONT=cip-$CIP_COMP-$CIP_TAG
+
+function cip_local_lib {
+  container_path=$(docker exec $CIP_CONT printenv PATH)
+  # PERL_MB_OPT "--install_base /home/cip/perl5"
+  export CIP_LOCAL_LIB="-e PATH=/home/cip/perl5/bin:$container_path -e PERL5LIB=/home/cip/perl5/lib/perl5 -e PERL_MM_OPT=INSTALL_BASE=/home/cip/perl5"
+}
+
+
+mkdir -p ~/.cip/install-cache/$CIP_TAG
+
+case "$1" in
+
+  before_install|start)
+    docker run \
+      --name $CIP_CONT \
+      -v `pwd`:/work \
+      -v ~/.cip:/home/cip/.cip \
+      -v ~/.cip/install-cache/"$CIP_TAG":/home/cip/perl5 \
+      -d \
+      plicease/ciperl:$CIP_TAG \
+      sleep infinity
+    if [ -f maint/cip-before-install ]; then
+      ./maint/cip-before-install
+    fi
+    ;;
+
+  install)
+    cip_local_lib
+    if [ -f maint/cip-install ]; then
+      ./maint/cip-install
+    elif [ -f dist.ini ]; then
+      echo ::::
+      echo Installing missing 
+      echo ::::
+      cip sudo bash -c 'dzil authordeps --missing | dzil-cpanm -n'
+      cip sudo bash -c 'dzil listdeps | cpanm -n'
+    elif [ -f Makefile.PL ]; then
+      echo "EUMM"
+    elif [ -f Build.PL ]; then
+      echo "MB"
+    elif [ -f cpanfile ]; then
+      echo "cpanfile"
+    else
+      echo "unknown installer"
+    fi
+    ;;
+
+  sudo)
+    shift
+    docker exec $CIP_CONT "$@"
+    ;;
+
+  exec)
+    cip_local_lib
+    shift
+    docker exec $CIP_LOCAL_LIB -e PERL_MB_OPT="\"--install_base /home/cip/perl5\"" -u 1000 $CIP_CONT "$@"
+    ;;
+
+  bash|tcsh|perl)
+    cip_local_lib
+    docker exec $CIP_LOCAL_LIB -e PERL_MB_OPT="\"--install_base /home/cip/perl5\"" -it -u 1000 $CIP_CONT "$@"
+    ;;
+
+  stop)
+    docker stop /$CIP_CONT
+    docker container rm /$CIP_CONT
+    ;;
+
+  *)
+    echo unknown command: $1
+    exit 2
+    ;;
+
+esac

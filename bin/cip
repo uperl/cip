@@ -49,9 +49,9 @@ case "$1" in
       ./maint/cip-install
     elif [ -f dist.ini ]; then
       echo ":::: DZIL DEPS   ::::"
-      cip sudo bash -c 'dzil authordeps --missing | dzil-cpanm -n'
+      cip sudo bash -c 'dzil-dzil authordeps --missing | dzil-cpanm -n'
       echo ":::: DZIL BUILD  ::::"
-      cip exec dzil build
+      cip exec dzil-dzil build
       echo ":::: MODULE DEPS ::::"
       dist_dir_name
       cip exec bash -c "cd $CIP_DIST_DIR; cpanm -n --installdeps ."
