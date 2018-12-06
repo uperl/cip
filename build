@@ -2,25 +2,18 @@
 
 set -ex
 
-cd base
-docker build -t plicease/ciperl-base .
-cd ..
+docker build -f base/Dockerfile -t plicease/ciperl-base .
 
-for VERSION in 5.28.1 5.26.3 5.24.4 5.22.4 5.20.3 ; do
+#for VERSION in 5.28.1 5.26.3 5.24.4 5.22.4 5.20.3 ; do
+for VERSION in 5.28.1 5.26.3  ; do
 
   mkdir -p versions/$VERSION
   sed "s/#PERL_VERSION#/$VERSION/g" < rc/Dockerfile.template > versions/$VERSION/Dockerfile
 
 done
 
-cd versions
-for TAG in * ; do
+for TAG in $(ls versions) ; do
 
-  cd $TAG
-  cp ../../rc/*-wrapper .
-  docker build -t plicease/ciperl:"$TAG" .
-  rm -f *-wrapper
-  cd ..
+  docker build -f versions/$TAG/Dockerfile -t plicease/ciperl:"$TAG" .
 
 done
-cd ..

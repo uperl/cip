@@ -28,3 +28,7 @@ ENV PLICEASE_DZIL_NO_GIT 1
 WORKDIR /work
 
 CMD tcsh
+
+RUN groupadd -g 1000 cip
+RUN useradd -u 1000 -g 1000 -m -s /bin/tcsh cip
+ADD --chown=1000:1000 rc/dot.cshrc /home/cip/.cshrc
