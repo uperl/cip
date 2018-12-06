@@ -6,10 +6,54 @@ if [ "x$CIP_TAG" == "x" ]; then
   export CIP_TAG=default
 fi
 
+function usage {
+  cat <<EOF
+usage: $0 [subcommand]
+
+subcommands:
+
+  cip travis_yml
+    - generate a .travis.yml that uses cip
+
+  cip start
+  cip before_install
+    - start background container
+
+  cip diag
+    - print perl diagnostics
+
+  cip install
+    - install necessary dzil and perl prereqs
+
+  cip script
+  cip test
+    - test your dist
+
+  cip sudo [command [ ... ] ]
+    - exec command in container as root
+
+  cip exec [command [ ... ] ]
+    - exec command in container as user
+
+  cip bash [ ... ]
+  cip tcsh [ ... ]
+  cip perl [ ... ]
+  cip nano [ ... ]
+    - interactive session with bash, tcsh, perl or nano
+
+  cip stop
+    - stop the background container
+
+environment:
+
+  CIP_TAG  the docker tag for plicease/ciperl defaults to 'default'
+EOF
+  exit 2
+}
+
 if [ "x$1" == "x" ]; then
   if [ "x$CIP_COMMAND" == "x" ]; then
-    echo usage
-    exit 2
+    usage
   else
     command=$CIP_COMMAND
     export -n CIP_COMMAND
@@ -123,7 +167,7 @@ case "$command" in
     fi
     ;;
 
-  script)
+  script|test)
     cip_local_lib
     if [ -f maint/cip-test ]; then
       ./maint/cip-test
@@ -180,7 +224,7 @@ case "$command" in
     docker exec $CIP_LOCAL_LIB -e PERL_MB_OPT="--install_base /home/cip/perl5" -u 1000 $CIP_CONT "$@"
     ;;
 
-  bash|tcsh|perl)
+  bash|tcsh|perl|nano)
     cip_local_lib
     docker exec $CIP_LOCAL_LIB -e PERL_MB_OPT="--install_base /home/cip/perl5" -it -u 1000 $CIP_CONT $command "$@"
     ;;
