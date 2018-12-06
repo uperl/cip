@@ -17,6 +17,7 @@ subcommands:
 
   cip start
   cip before_install
+  cip before-install
     - start background container
 
   cip diag
@@ -85,7 +86,7 @@ services:
 
 before_install:
   - curl https://raw.githubusercontent.com/plicease/cip/master/bin/travis-bootstrap | bash
-  - cip before_install
+  - cip before-install
 
 install:
   - cip diag
@@ -128,7 +129,7 @@ case "$command" in
     travis_yml
     ;;
 
-  before_install|start)
+  before_install|before-install|start)
     docker run \
       --name $CIP_CONT \
       -v `pwd`:/work \
