@@ -119,12 +119,12 @@ case "$1" in
   exec)
     cip_local_lib
     shift
-    docker exec $CIP_LOCAL_LIB -e PERL_MB_OPT="\"--install_base /home/cip/perl5\"" -u 1000 $CIP_CONT "$@"
+    docker exec $CIP_LOCAL_LIB -e PERL_MB_OPT="--install_base /home/cip/perl5" -u 1000 $CIP_CONT "$@"
     ;;
 
   bash|tcsh|perl)
     cip_local_lib
-    docker exec $CIP_LOCAL_LIB -e PERL_MB_OPT="\"--install_base /home/cip/perl5\"" -it -u 1000 $CIP_CONT "$@"
+    docker exec $CIP_LOCAL_LIB -e PERL_MB_OPT="--install_base /home/cip/perl5" -it -u 1000 $CIP_CONT "$@"
     ;;
 
   stop)
