@@ -45,6 +45,10 @@ subcommands:
   cip stop
     - stop the background container
 
+  cip stop_all
+  cip stop-all
+    - stop all background cip containers
+
 environment:
 
   CIP_TAG  the docker tag for plicease/ciperl defaults to 'default'
@@ -233,6 +237,16 @@ case "$command" in
   stop)
     docker stop /$CIP_CONT
     docker container rm /$CIP_CONT
+    ;;
+
+  stop_all|stop-all)
+    for name in $( docker ps --format '{{json .Names}}' ) ; do
+      name=$( echo $name | jq -r . )
+      if echo $name | grep -q ^cip- ; then
+        docker stop /$name
+        docker stop /$name
+      fi
+    done
     ;;
 
   *)
