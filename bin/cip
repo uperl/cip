@@ -63,6 +63,7 @@ case "$command" in
       cip exec dzil-dzil build
       echo ":::: MODULE DEPS ::::"
       dist_dir_name
+      echo "+cip exec bash -c \"cd $CIP_DIST_DIR; cpanm -n -v --installdeps .\""
       cip exec bash -c "cd $CIP_DIST_DIR; cpanm -n -v --installdeps ."
     elif [ -f Makefile.PL ] || [ -f Build.PL ] || [ -f cpanfile ]; then
       cip exec cpanm -n --installdeps .
