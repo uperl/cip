@@ -37,12 +37,6 @@ mkdir -p ~/.cip/install-cache/$CIP_TAG
 
 case "$command" in
 
-  bootstrap)
-    curl https://raw.githubusercontent.com/plicease/cip/master/bin/cip > /tmp/cip
-    chmod +x /tmp/cip
-    sudo mv /tmp/cip /usr/bin
-    ;;
-
   before_install|start)
     docker run \
       --name $CIP_CONT \

@@ -1,0 +1,7 @@
+#!/bin/bash
+
+curl https://raw.githubusercontent.com/plicease/cip/master/bin/cip > /tmp/cip
+chmod +x /tmp/cip
+sudo mv /tmp/cip /usr/bin
+sudo chown -R 1000:1000 .
+
