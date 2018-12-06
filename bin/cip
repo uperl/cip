@@ -32,13 +32,57 @@ function dist_dir_name {
   export CIP_DIST_DIR=$(grep ^name dist.ini | head -1 | cut -d= -f2 | sed 's/^[ ]*//' | sed 's/[ ]*$//')-$(grep ^version dist.ini | head -1 | cut -d= -f2 | sed 's/^[ ]*//' | sed 's/[ ]*$//')
 }
 
+function travis_yml {
+  cat > .travis.yml <<'EOF'
+language: minimal
+dist: xenial
+services:
+  - docker
+
+before_install:
+  - curl https://raw.githubusercontent.com/plicease/cip/master/bin/travis-bootstrap | bash
+  - cip before_install
+
+install:
+  - cip diag
+  - cip install
+
+script:
+  - cip script
+
+jobs:
+  include:
+    - env: CIP_TAG=5.29
+    - env: CIP_TAG=5.28
+    - env: CIP_TAG=5.26
+    - env: CIP_TAG=5.24
+    - env: CIP_TAG=5.22
+    - env: CIP_TAG=5.20
+    - env: CIP_TAG=5.18
+    - env: CIP_TAG=5.16
+    - env: CIP_TAG=5.14
+    - env: CIP_TAG=5.12
+    - env: CIP_TAG=5.10
+    - env: CIP_TAG=5.8
+
+cache:
+  directories:
+    - "$HOME/.cip"
+EOF
+}
 
 mkdir -p ~/.cip/install-cache/$CIP_TAG
+mkdir -p ~/.cip/dzil-cache/$CIP_TAG
 if [ "x$TRAVIS" == "xtrue" ]; then
   chmod 777 ~/.cip/install-cache/$CIP_TAG
+  chmod 777 ~/.cip/dzil-cache/$CIP_TAG
 fi
 
 case "$command" in
+
+  travis_yml)
+    travis_yml
+    ;;
 
   before_install|start)
     docker run \
@@ -46,6 +90,7 @@ case "$command" in
       -v `pwd`:/work \
       -v ~/.cip:/home/cip/.cip \
       -v ~/.cip/install-cache/"$CIP_TAG":/home/cip/perl5 \
+      -v ~/.cip/dzil-cache/"$CIP_TAG":/home/cip/dzil \
       -d \
       plicease/ciperl:$CIP_TAG \
       sleep infinity
@@ -54,9 +99,12 @@ case "$command" in
     fi
     ;;
 
+  diag)
+    cip exec perl -V
+    ;;
+
   install)
     cip_local_lib
-    cip exec perl -V
     if [ -f maint/cip-install ]; then
       ./maint/cip-install
     elif [ -f dist.ini ]; then
@@ -148,3 +196,4 @@ case "$command" in
     ;;
 
 esac
+
