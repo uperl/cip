@@ -59,6 +59,7 @@ case "$command" in
 
   install)
     cip_local_lib
+    cip exec perl -V
     if [ -f maint/cip-install ]; then
       ./maint/cip-install
     elif [ -f dist.ini ]; then
