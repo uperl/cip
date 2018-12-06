@@ -202,7 +202,7 @@ case "$command" in
       echo "+ make"
       cip exec make
       echo "+ make test TEST_VERBOSE=1"
-      cip exec make tes TEST_VERBOSE=1t
+      cip exec make test TEST_VERBOSE=1t
     elif [ -f Build.PL ]; then
       echo "+ perl Build.PL"
       cip exec perl Build.PL
