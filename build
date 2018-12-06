@@ -22,3 +22,7 @@ done
 for TAG in $(ls versions) ; do
   docker build -f versions/$TAG/Dockerfile -t plicease/ciperl:"$TAG" .
 done
+
+for TAG in $(ls versions) ; do
+  docker push plicease/ciperl:"$TAG"
+done

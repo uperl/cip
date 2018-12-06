@@ -7,8 +7,16 @@ if [ "x$CIP_TAG" == "x" ]; then
 fi
 
 if [ "x$1" == "x" ]; then
-  echo usage
-  exit 2
+  if [ "x$CIP_COMMAND" == "x" ]; then
+    echo usage
+    exit 2
+  else
+    command=$CIP_COMMAND
+    export -n CIP_COMMAND
+  fi
+else
+  command=$1
+  shift
 fi
 
 export CIP_COMP=$(basename $(pwd))
@@ -27,7 +35,7 @@ function dist_dir_name {
 
 mkdir -p ~/.cip/install-cache/$CIP_TAG
 
-case "$1" in
+case "command1" in
 
   before_install|start)
     docker run \
@@ -74,15 +82,15 @@ case "$1" in
         cip exec bash -c "cd $CIP_DIST_DIR; perl Makefile.PL"
         echo "+ make"
         cip exec bash -c "cd $CIP_DIST_DIR; make"
-        echo "+ make test"
-        cip exec bash -c "cd $CIP_DIST_DIR; make test"
+        echo "+ make test TEST_VERBOSE=1"
+        cip exec bash -c "cd $CIP_DIST_DIR; make test TEST_VERBOSE=1"
       elif [ -f "$CIP_DIST_DIR/Build.PL" ]; then
         echo "+ perl Build.PL"
         cip exec bash -c "cd $CIP_DIST_DIR; perl Build.PL"
         echo "+ ./Build"
         cip exec bash -c "cd $CIP_DIST_DIR; ./Build"
-        echo "+ ./Build test"
-        cip exec bash -c "cd $CIP_DIST_DIR; ./Build test"
+        echo "+ ./Build test verbose=1"
+        cip exec bash -c "cd $CIP_DIST_DIR; ./Build test verbose=1"
       else
         echo "unknown installer (dzil)"
         exit 2;
@@ -92,15 +100,15 @@ case "$1" in
       cip exec perl Makefile.PL
       echo "+ make"
       cip exec make
-      echo "+ make test"
-      cip exec make test
+      echo "+ make test TEST_VERBOSE=1"
+      cip exec make tes TEST_VERBOSE=1t
     elif [ -f Build.PL ]; then
       echo "+ perl Build.PL"
       cip exec perl Build.PL
       echo "+ ./Build"
       cip exec ./Build
-      echo "+ ./Build test"
-      cip exec ./Build test
+      echo "+ ./Build test verbose=1"
+      cip exec ./Build test verbose=1
     elif [ -d t ]; then
       echo "+ prove -lvm"
       cip exec prove -lvm
@@ -112,19 +120,17 @@ case "$1" in
     
 
   sudo)
-    shift
     docker exec $CIP_CONT "$@"
     ;;
 
   exec)
     cip_local_lib
-    shift
     docker exec $CIP_LOCAL_LIB -e PERL_MB_OPT="--install_base /home/cip/perl5" -u 1000 $CIP_CONT "$@"
     ;;
 
   bash|tcsh|perl)
     cip_local_lib
-    docker exec $CIP_LOCAL_LIB -e PERL_MB_OPT="--install_base /home/cip/perl5" -it -u 1000 $CIP_CONT "$@"
+    docker exec $CIP_LOCAL_LIB -e PERL_MB_OPT="--install_base /home/cip/perl5" -it -u 1000 $CIP_CONT $command "$@"
     ;;
 
   stop)
@@ -133,7 +139,7 @@ case "$1" in
     ;;
 
   *)
-    echo unknown command: $1
+    echo unknown command: $command
     exit 2
     ;;
 
