@@ -174,45 +174,67 @@ case "$command" in
 
   script|test)
     cip_local_lib
-    if [ -f maint/cip-test ]; then
-      ./maint/cip-test
-    elif [ -f dist.ini ]; then
+    if [ -f dist.ini ]; then
       dist_dir_name
-      if [ -f "$CIP_DIST_DIR/Makefile.PL" ]; then
-        echo "+ perl Makefile.PL"
-        cip exec bash -c "cd $CIP_DIST_DIR; perl Makefile.PL"
+      if [ -f "$CIP_DIST_DIR/maint/cip-test" ]; then
+        cip bash -c "cd $CIP_DIST_DIR; env PERL_USE_UNSAFE_INC=0 $CIP_ENV ./maint/cip-test"
+      elif [ -f "$CIP_DIST_DIR/Makefile.PL" ]; then
+        if [ "x$CIP_ENV" == "x" ]; then
+          echo "+ perl Makefile.PL"
+          cip exec bash -c "cd $CIP_DIST_DIR; perl Makefile.PL"
+        else
+          echo "+ env $CIP_ENV perl Makefile.PL"
+          cip exec bash -c "cd $CIP_DIST_DIR; env $CIP_ENV perl Makefile.PL"
+        fi
         echo "+ make"
         cip exec bash -c "cd $CIP_DIST_DIR; make"
-        echo "+ make test TEST_VERBOSE=1"
-        cip exec bash -c "cd $CIP_DIST_DIR; make test TEST_VERBOSE=1"
+        echo "+ env PERL_USE_UNSAFE_INC=0 make test TEST_VERBOSE=1"
+        cip exec bash -c "cd $CIP_DIST_DIR; env PERL_USE_UNSAFE_INC=0 make test TEST_VERBOSE=1"
       elif [ -f "$CIP_DIST_DIR/Build.PL" ]; then
-        echo "+ perl Build.PL"
-        cip exec bash -c "cd $CIP_DIST_DIR; perl Build.PL"
+        if [ "x$CIP_ENV" == "x" ]; then
+          echo "+ perl Build.PL"
+          cip exec bash -c "cd $CIP_DIST_DIR; perl Build.PL"
+        else
+          echo "+ env $CIP_ENV perl Build.PL"
+          cip exec bash -c "cd $CIP_DIST_DIR; env $CIP_ENV perl Build.PL"
+        fi
         echo "+ ./Build"
         cip exec bash -c "cd $CIP_DIST_DIR; ./Build"
-        echo "+ ./Build test verbose=1"
-        cip exec bash -c "cd $CIP_DIST_DIR; ./Build test verbose=1"
+        echo "+ env PERL_USE_UNSAFE_INC=0 ./Build test verbose=1"
+        cip exec bash -c "cd $CIP_DIST_DIR; env PERL_USE_UNSAFE_INC=0 ./Build test verbose=1"
       else
         echo "unknown installer (dzil)"
         exit 2;
       fi
+    elif [ -f maint/cip-test ]; then
+      cip bash -c 'env PERL_USE_UNSAFE_INC=0 ./maint/cip-test'
     elif [ -f Makefile.PL ]; then
-      echo "+ perl Makefile.PL"
-      cip exec perl Makefile.PL
+      if [ "x$CIP_ENV" == "x" ]; then
+        echo "+ perl Makefile.PL"
+        cip exec perl Makefile.PL
+      else
+        echo "+ env $CIP_ENV perl Makefile.PL"
+        cip exec env $CIP_ENV perl Makefile.PL
+      fi
       echo "+ make"
       cip exec make
-      echo "+ make test TEST_VERBOSE=1"
-      cip exec make test TEST_VERBOSE=1t
+      echo "+ env PERL_USE_UNSAFE_INC=0 make test TEST_VERBOSE=1"
+      cip exec env PERL_USE_UNSAFE_INC=0 make test TEST_VERBOSE=1t
     elif [ -f Build.PL ]; then
-      echo "+ perl Build.PL"
-      cip exec perl Build.PL
+      if [ "x$CIP_ENV" == "x" ]; then
+        echo "+ perl Build.PL"
+        cip exec perl Build.PL
+      else
+        echo "+ env $CIP_ENV perl Build.PL"
+        cip exec env $CIP_ENV perl Build.PL
+      fi
       echo "+ ./Build"
       cip exec ./Build
-      echo "+ ./Build test verbose=1"
-      cip exec ./Build test verbose=1
+      echo "+ env PERL_USE_UNSAFE_INC=0 ./Build test verbose=1"
+      cip exec env PERL_USE_UNSAFE_INC=0 ./Build test verbose=1
     elif [ -d t ]; then
-      echo "+ prove -lvm"
-      cip exec prove -lvm
+      echo "+ env PERL_USE_UNSAFE_INC=0 prove -lvm"
+      cip exec env PERL_USE_UNSAFE_INC=0 prove -lvm
     else
       echo "unknown instaler"
       exit 2;
