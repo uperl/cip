@@ -1,0 +1,10 @@
+#!/bin/bash
+
+if [ "x$1" == "x" ] || [ "x$2" == "x" ]; then
+    echo "usage"
+    exit 2
+fi
+
+myhome=~
+
+docker run --name $1-$2 -v $myhome:/home/ollisg -d plicease/$1:$2 sleep infinity

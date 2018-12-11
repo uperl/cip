@@ -1,0 +1,8 @@
+#!/bin/bash
+
+if [ "x$1" == "x" ] || [ "x$2" == "x" ]; then
+    echo "usage"
+    exit 2
+fi
+
+docker exec -it -u 1000 $1-$2 tcsh

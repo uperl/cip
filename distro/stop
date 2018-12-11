@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if [ "x$1" == "x" ] || [ "x$2" == "x" ]; then
+    echo "usage"
+    exit 2
+fi
+
+docker stop /$1-$2
+docker container rm /$1-$2
