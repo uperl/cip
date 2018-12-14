@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e 
+set -e
 
 if [ "x$CIP_TAG" == "x" ]; then
   export CIP_TAG=default
@@ -143,6 +143,7 @@ case "$command" in
       -d \
       plicease/ciperl:$CIP_TAG \
       sleep infinity
+    cip exec cpanm -n --reinstall App::cpanminus
     if [ -f maint/cip-before-install ]; then
       ./maint/cip-before-install
     fi
@@ -240,7 +241,6 @@ case "$command" in
       exit 2;
     fi
     ;;
-    
 
   sudo)
     docker exec $CIP_CONT "$@"
