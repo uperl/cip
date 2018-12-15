@@ -25,6 +25,9 @@ RUN mkdir /work
 
 ENV PLICEASE_DZIL_NO_GIT 1
 
+ENV TZ America/Denver
+
+
 WORKDIR /work
 
 CMD tcsh

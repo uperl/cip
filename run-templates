@@ -18,6 +18,11 @@ my $latest_dev    = '5.29.5';
     debian => [ qw( jessie stretch buster ) ],
     ubuntu => [ qw( xenial bionic ) ],
   );
+  my %extra = (
+    bionic => {
+      tz => 'America/Denver',
+    },
+  );
 
   foreach my $dist (sort keys %deb)
   {
@@ -28,7 +33,7 @@ my $latest_dev    = '5.29.5';
       $path = $path->child('Dockerfile');
       $tt->process(
         "rc/Dockerfile-base.tt",
-        { dist => $dist, dist_release => $dist_release },
+        { dist => $dist, dist_release => $dist_release, %{ $extra{$dist_release} // {} } },
         "$path"
       ) || die $tt->error
     }
@@ -119,6 +124,7 @@ foreach my $perl_version ($latest_stable)
   {
     my $tag = "$perl_version-$dist_release";
     my @aliases;
+    push @aliases, ($perl_version =~ s/\.[0-9]+$//r) . "-$dist_release";
     generate_dockerfile($tag, \@aliases,
       dist_release => $dist_release,
       perl_version => $perl_version,

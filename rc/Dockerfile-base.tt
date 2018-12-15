@@ -24,6 +24,9 @@ RUN apt-get update \
 RUN mkdir /work
 
 ENV PLICEASE_DZIL_NO_GIT 1
+[% IF tz %]
+ENV TZ [% tz %]
+[% END %]
 
 WORKDIR /work
 
