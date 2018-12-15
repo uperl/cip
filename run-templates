@@ -1,0 +1,112 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+use autodie;
+use 5.024;
+use Template;
+use File::chdir;
+use Path::Tiny qw( path );
+
+my $tt = Template->new;
+
+# build the Dockerfiles for the base images
+{
+  my %deb = (
+    debian => [ qw( jessie stretch buster ) ],
+    ubuntu => [ qw( xenial bionic ) ],
+  );
+
+  foreach my $dist (sort keys %deb)
+  {
+    foreach my $dist_release (sort $deb{$dist}->@*)
+    {
+      my $path = path('base/versions')->child($dist_release);
+      $path->mkpath;
+      $path = $path->child('Dockerfile');
+      $tt->process(
+        "rc/Dockerfile-base.tt",
+        { dist => $dist, dist_release => $dist_release },
+        "$path"
+      ) || die $tt->error
+    }
+  }
+}
+
+sub generate_dockerfile
+{
+  my($tag, $aliases, %vars) = @_;
+  my $path = path('versions')->child($tag);
+  $path->mkpath;
+  foreach my $alias ($aliases->@*)
+  {
+    my $alias_path = path('versions')->child($alias);
+    if(-e $alias_path)
+    {
+      if(! -l $alias_path)
+      {
+        die "alias path $alias_path is not a symlink!";
+      }
+      unlink $alias_path;
+    }
+    symlink $path->basename, "$alias_path";
+  }
+  $tt->process(
+    "rc/Dockerfile.tt",
+    \%vars,
+    $path->child('Dockerfile')->stringify,
+  ) || die $tt->error;
+}
+
+foreach my $perl_version (qw( 5.28.1 5.26.3 5.24.4 5.22.4 5.20.3 5.18.4 5.16.3 5.14.4 ))
+{
+  my @aliases;
+  push @aliases, $perl_version;
+  push @aliases, $perl_version =~ s/\.[0-9]+$//r;
+  generate_dockerfile("$perl_version-stretch", \@aliases,
+    dist_release => 'stretch',
+    perl_version => $perl_version,
+  );
+}
+
+foreach my $perl_version (qw( 5.29.5 ))
+{
+  my @aliases;
+  push @aliases, $perl_version;
+  push @aliases, $perl_version =~ s/\.[0-9]+$//r;
+  generate_dockerfile("$perl_version-stretch", \@aliases,
+    dist_release => 'stretch',
+    perl_dev     => 1,
+    perl_flags   => '-Dusedevel',
+    perl_version => $perl_version,
+  );
+}
+
+foreach my $perl_version (qw( 5.12.5 5.10.1 5.10.0 5.8.9 5.8.8 5.8.7 5.8.6 5.8.5 5.8.4 5.8.3 5.8.2 5.8.1 ))
+{
+  my @aliases;
+  push @aliases, $perl_version;
+  push @aliases, $perl_version =~ s/\.[0-9]+$//r;
+  generate_dockerfile("$perl_version-stretch", \@aliases,
+    old          => '5.24.4',
+    dist_release => 'stretch',
+    perl_version => $perl_version,
+  );
+}
+
+foreach my $flag (qw( threads longdouble quadmath ))
+{
+  foreach my $perl_version (qw( 5.14.4 5.28.1 ))
+  {
+    next if $flag eq 'quadmath' && $perl_version eq '5.14.4';
+    my $tag = "$perl_version-stretch-$flag";
+    my @aliases;
+    push @aliases, "$perl_version-$flag";
+    push @aliases, ($perl_version =~ s/\.[0-9]+$//r) . "-$flag";
+    generate_dockerfile($tag, \@aliases,
+      perl_flags   => "-Duse$flag",
+      dist_release => 'stretch',
+      perl_version => $perl_version,
+    );    
+  }
+}

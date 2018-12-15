@@ -1,71 +1,27 @@
 #!/bin/bash
 
-set -ex
+set -e
 
-docker build -f base/Dockerfile -t plicease/ciperl-base .
+if [ "x$1" == "x" ]; then
+  echo "usage: build tagname [ tagname [ ... ] ]"
+  exit 2
+fi
 
-for VERSION in 5.28.1 5.26.3 5.24.4 5.22.4 5.20.3 5.18.4 5.16.3 5.14.4 ; do
-  mkdir -p versions/$VERSION
-  sed "s/#PERL_VERSION#/$VERSION/g" < rc/Dockerfile.template > versions/$VERSION/Dockerfile
-done
+while [ "x$1" != "x" ]; do
 
-for VERSION in 5.29.5 ; do
-  mkdir -p versions/$VERSION
-  sed "s/#PERL_VERSION#/$VERSION/g" < rc/Dockerfile-dev.template > versions/$VERSION/Dockerfile
-done
+  tag=$(echo $1 | sed 's/^.*\///')
 
-for VERSION in 5.12.5 5.10.1 5.10.0 5.8.9 5.8.8 5.8.1; do
-  mkdir -p versions/$VERSION
-  sed "s/#PERL_VERSION#/$VERSION/g" < rc/Dockerfile-old.template > versions/$VERSION/Dockerfile
-done
+  if [ -f "versions/$tag/Dockerfile" ]; then
+    docker build -f versions/$tag/Dockerfile -t plicease/ciperl:"$tag" .
+    docker push plicease/ciperl:"$tag"
+  elif [ -f "base/versions/$tag/Dockerfile" ]; then
+    docker build -f base/versions/$tag/Dockerfile -t plicease/ciperl-base:"$tag" .
+    docker push plicease/ciperl-base:"$tag"
+  else
+    echo "no such tag: $x1"
+    exit 2
+  fi
 
-for FLAG in threads longdouble ; do
-  for VERSION in 5.28.1 5.14.4 ; do
-    mkdir -p versions/$VERSION-$FLAG
-    cat rc/Dockerfile-flag.template | sed "s/#PERL_VERSION#/$VERSION/g" | sed "s/#PERL_FLAGS#/-Duse$FLAG/g" > versions/$VERSION-$FLAG/Dockerfile
-  done
-done  
+  shift
 
-for FLAG in quadmath ; do
-  for VERSION in 5.28.1 ; do
-    mkdir -p versions/$VERSION-$FLAG
-    cat rc/Dockerfile-flag.template | sed "s/#PERL_VERSION#/$VERSION/g" | sed "s/#PERL_FLAGS#/-Duse$FLAG/g" > versions/$VERSION-$FLAG/Dockerfile
-  done
-done  
-
-for TAG in $(ls versions) ; do
-  docker build -f versions/$TAG/Dockerfile -t plicease/ciperl:"$TAG" .
-done
-
-for TAG in $(ls versions) ; do
-  docker push plicease/ciperl:"$TAG"
-done
-
-docker tag plicease/ciperl:5.8.8 plicease/ciperl:5.8
-docker tag plicease/ciperl:5.10.1 plicease/ciperl:5.10
-docker tag plicease/ciperl:5.12.5 plicease/ciperl:5.12
-docker tag plicease/ciperl:5.14.4 plicease/ciperl:5.14
-docker tag plicease/ciperl:5.16.3 plicease/ciperl:5.16
-docker tag plicease/ciperl:5.18.4 plicease/ciperl:5.18
-docker tag plicease/ciperl:5.20.3 plicease/ciperl:5.20
-docker tag plicease/ciperl:5.22.4 plicease/ciperl:5.22
-docker tag plicease/ciperl:5.24.4 plicease/ciperl:5.24
-docker tag plicease/ciperl:5.26.3 plicease/ciperl:5.26
-docker tag plicease/ciperl:5.28.1 plicease/ciperl:5.28
-docker tag plicease/ciperl:5.29.5 plicease/ciperl:5.29
-
-for SUB in 8 10 12 14 16 18 20 22 24 26 28 29 ; do
-  docker push plicease/ciperl:5.$SUB
-done
-
-for FLAG in threads longdouble ; do
-  docker tag plicease/ciperl:5.28.1-$FLAG plicease/ciperl:5.28-$FLAG
-  docker push plicease/ciperl:5.28-$FLAG
-  docker tag plicease/ciperl:5.14.4-$FLAG plicease/ciperl:5.14-$FLAG
-  docker push plicease/ciperl:5.14-$FLAG
-done
-
-for FLAG in quadmath ; do
-  docker tag plicease/ciperl:5.28.1-$FLAG plicease/ciperl:5.28-$FLAG
-  docker push plicease/ciperl:5.28-$FLAG
 done

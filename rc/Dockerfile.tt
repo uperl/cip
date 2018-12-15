@@ -1,0 +1,42 @@
+FROM plicease/ciperl-base:[% dist_release %]
+LABEL maintainer="Graham Ollis <plicease@cpan.org>"
+
+[% IF old %]
+RUN curl https://raw.githubusercontent.com/tokuhirom/Perl-Build/master/perl-build | perl - [% old %] /opt/perl/[% old %]/
+RUN curl https://cpanmin.us | /opt/perl/[% old %]/bin/perl - App::cpanminus && rm -rf ~/.cpanm
+RUN /opt/perl/[% old %]/bin/cpanm -n -L /opt/dzil Dist::Zilla && rm -rf ~/.cpanm
+RUN /opt/perl/[% old %]/bin/cpanm -n -L /opt/dzil Dist::Zilla::PluginBundle::Author::Plicease && rm -rf ~/.cpanm
+RUN /opt/perl/[% old %]/bin/cpanm -n -L /opt/dzil App::af && rm -rf ~/.cpanm
+[% END %]
+
+RUN curl https://raw.githubusercontent.com/tokuhirom/Perl-Build/master/perl-build | perl - [% perl_version %] /opt/perl/[% perl_version %]/[% IF perl_flags %] [% perl_flags %][% END %]
+RUN curl https://cpanmin.us | /opt/perl/[% perl_version %]/bin/perl[% IF perl_flags %][% perl_version %][% END %] - App::cpanminus && rm -rf ~/.cpanm
+
+[% IF perl_dev %]
+RUN /opt/perl/[% perl_version %]/bin/cpanm -n -L /opt/refileutils App::RegexFileUtils
+ADD rc/reln-wrapper /opt/refileutils/bin/reln-wrapper
+RUN chmod +x /opt/refileutils/bin/reln-wrapper
+RUN ln -s /opt/refileutils/bin/reln-wrapper /opt/perl/[% perl_version %]/bin/reln
+[% END %]
+
+ENV PATH /opt/perl/[% perl_version %]/bin:$PATH
+
+[% IF perl_dev %]
+RUN bash -c 'cd /opt/perl/[% perl_version %]/bin; reln -s "s/[% perl_version %]$//"'
+[% END %]
+
+[% IF old %]
+ADD rc/dzil-old-cpanm /opt/perl/[% perl_version %]/bin/dzil-cpanm
+ADD rc/dzil-old-dzil  /opt/perl/[% perl_version %]/bin/dzil-dzil
+ADD rc/dzil-old-af    /opt/perl/[% perl_version %]/bin/dzil-af
+[% ELSE %]
+RUN cpanm -n -L /opt/dzil Dist::Zilla && rm -rf ~/.cpanm
+RUN cpanm -n -L /opt/dzil Dist::Zilla::PluginBundle::Author::Plicease && rm -rf ~/.cpanm
+RUN cpanm -n -L /opt/dzil App::af && rm -rf ~/.cpanm
+
+ADD rc/dzil-cpanm /opt/perl/[% perl_version %]/bin
+ADD rc/dzil-dzil  /opt/perl/[% perl_version %]/bin
+ADD rc/dzil-af    /opt/perl/[% perl_version %]/bin
+[% END %]
+
+RUN chmod +x /opt/perl/[% perl_version %]/bin/dzil-*
