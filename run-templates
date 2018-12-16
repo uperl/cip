@@ -12,6 +12,10 @@ my $tt = Template->new;
 my $latest_stable = '5.28.1';
 my $latest_dev    = '5.29.5';
 
+my %perl_sources = (
+  '5.28.1' => 'https://cpan.metacpan.org/authors/id/S/SH/SHAY/perl-5.28.1.tar.gz',
+);
+
 # build the Dockerfiles for the base images
 {
   my %deb = (
@@ -34,6 +38,47 @@ my $latest_dev    = '5.29.5';
       $tt->process(
         "rc/Dockerfile-base.tt",
         { dist => $dist, dist_release => $dist_release, %{ $extra{$dist_release} // {} } },
+        "$path"
+      ) || die $tt->error
+    }
+  }
+
+  my %fedora = (
+    fedora => [ 29 ],
+    centos => [ 7 ],
+  );
+
+  foreach my $dist (sort keys %fedora)
+  {
+    foreach my $dist_version (sort $fedora{$dist}->@*)
+    {
+      my $dist_release = "$dist$dist_version";
+      my $path = path('base/versions')->child($dist_release);
+      $path->mkpath;
+      $path = $path->child('Dockerfile');
+      $tt->process(
+        "rc/Dockerfile-base-fedora.tt",
+        { dist => $dist, dist_version => $dist_version, tz => 'America/Denver', %{ $extra{$dist_release} // {} } },
+        "$path"
+      ) || die $tt->error
+    }
+  }
+
+  my %alpine = (
+    alpine => [ '3.8' ],
+  );
+
+  foreach my $dist (sort keys %alpine)
+  {
+    foreach my $dist_version (sort $alpine{$dist}->@*)
+    {
+      my $dist_release = "$dist$dist_version";
+      my $path = path('base/versions')->child($dist_release);
+      $path->mkpath;
+      $path = $path->child('Dockerfile');
+      $tt->process(
+        "rc/Dockerfile-base-alpine.tt",
+        { dist => $dist, dist_version => $dist_version, tz => 'America/Denver', %{ $extra{$dist_release} // {} } },
         "$path"
       ) || die $tt->error
     }
@@ -70,6 +115,7 @@ foreach my $perl_version (qw( 5.28.1 5.26.3 5.24.4 5.22.4 5.20.3 5.18.4 5.16.3 5
   my @aliases;
   push @aliases, $perl_version;
   push @aliases, $perl_version =~ s/\.[0-9]+$//r;
+  push @aliases, ($perl_version =~ s/\.[0-9]+$//r) . "-stretch";
   generate_dockerfile("$perl_version-stretch", \@aliases,
     dist_release => 'stretch',
     perl_version => $perl_version,
@@ -93,7 +139,11 @@ foreach my $perl_version (qw( 5.12.5 5.10.1 5.10.0 5.8.9 5.8.8 5.8.7 5.8.6 5.8.5
 {
   my @aliases;
   push @aliases, $perl_version;
-  push @aliases, $perl_version =~ s/\.[0-9]+$//r;
+  if($perl_version !~ /^5.8/ || $perl_version eq '5.8.8')
+  {
+    push @aliases, $perl_version =~ s/\.[0-9]+$//r;
+    push @aliases, ($perl_version =~ s/\.[0-9]+$//r) . "-stretch";
+  }
   generate_dockerfile("$perl_version-stretch", \@aliases,
     old          => '5.24.4',
     dist_release => 'stretch',
@@ -110,24 +160,29 @@ foreach my $flag (qw( threads longdouble quadmath ))
     my @aliases;
     push @aliases, "$perl_version-$flag";
     push @aliases, ($perl_version =~ s/\.[0-9]+$//r) . "-$flag";
+    push @aliases, ($perl_version =~ s/\.[0-9]+$//r) . "-stretch-$flag";
     generate_dockerfile($tag, \@aliases,
       perl_flags   => "-Duse$flag",
       dist_release => 'stretch',
       perl_version => $perl_version,
-    );    
+    );
   }
 }
 
 foreach my $perl_version ($latest_stable)
 {
-  foreach my $dist_release (qw( bionic buster jessie xenial ))
+  foreach my $dist_release (qw( bionic buster jessie xenial centos7 fedora29 alpine3.8 ))
   {
     my $tag = "$perl_version-$dist_release";
     my @aliases;
     push @aliases, ($perl_version =~ s/\.[0-9]+$//r) . "-$dist_release";
+    my $no_perl = 0;
+    $no_perl = 1 if $dist_release =~ /^(fedora|centos|alpine)/;
     generate_dockerfile($tag, \@aliases,
+      no_perl      => $no_perl,
       dist_release => $dist_release,
       perl_version => $perl_version,
+      perl_source  => $perl_sources{$perl_version},
     );
   }
 }

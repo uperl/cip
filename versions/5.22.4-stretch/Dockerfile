@@ -3,7 +3,12 @@ LABEL maintainer="Graham Ollis <plicease@cpan.org>"
 
 
 
+
+
 RUN curl https://raw.githubusercontent.com/tokuhirom/Perl-Build/master/perl-build | perl - 5.22.4 /opt/perl/5.22.4/
+
+
+
 RUN curl https://cpanmin.us | /opt/perl/5.22.4/bin/perl - App::cpanminus && rm -rf ~/.cpanm
 
 

@@ -9,7 +9,25 @@ RUN /opt/perl/[% old %]/bin/cpanm -n -L /opt/dzil Dist::Zilla::PluginBundle::Aut
 RUN /opt/perl/[% old %]/bin/cpanm -n -L /opt/dzil App::af && rm -rf ~/.cpanm
 [% END %]
 
+[% IF no_perl %]
+
+RUN  mkdir /tmp/perl-build \
+  && cd /tmp/perl-build \
+  && curl -O [% perl_source %] \
+  && tar xvf perl-[% perl_version %].tar.gz \
+  && cd perl-[% perl_version %] \
+  && ./Configure -des -Dprefix=/opt/perl/[% perl_version %] \
+  && make \
+  && make install \
+  && cd / \
+  && rm -rf /tmp/perl-build
+
+[% ELSE %]
+
 RUN curl https://raw.githubusercontent.com/tokuhirom/Perl-Build/master/perl-build | perl - [% perl_version %] /opt/perl/[% perl_version %]/[% IF perl_flags %] [% perl_flags %][% END %]
+
+[% END %]
+
 RUN curl https://cpanmin.us | /opt/perl/[% perl_version %]/bin/perl[% IF perl_flags %][% perl_version %][% END %] - App::cpanminus && rm -rf ~/.cpanm
 
 [% IF perl_dev %]

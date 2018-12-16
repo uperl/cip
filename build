@@ -18,7 +18,7 @@ while [ "x$1" != "x" ]; do
     docker build -f base/versions/$tag/Dockerfile -t plicease/ciperl-base:"$tag" .
     docker push plicease/ciperl-base:"$tag"
   else
-    echo "no such tag: $x1"
+    echo "no such tag: $tag"
     exit 2
   fi
 

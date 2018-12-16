@@ -9,7 +9,12 @@ RUN /opt/perl/5.24.4/bin/cpanm -n -L /opt/dzil Dist::Zilla::PluginBundle::Author
 RUN /opt/perl/5.24.4/bin/cpanm -n -L /opt/dzil App::af && rm -rf ~/.cpanm
 
 
+
+
 RUN curl https://raw.githubusercontent.com/tokuhirom/Perl-Build/master/perl-build | perl - 5.10.1 /opt/perl/5.10.1/
+
+
+
 RUN curl https://cpanmin.us | /opt/perl/5.10.1/bin/perl - App::cpanminus && rm -rf ~/.cpanm
 
 
