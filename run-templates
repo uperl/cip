@@ -10,7 +10,7 @@ use Path::Tiny qw( path );
 
 my $tt = Template->new;
 my $latest_stable = '5.28.1';
-my $latest_dev    = '5.29.5';
+my $latest_dev    = '5.29.6';
 
 my %perl_sources = (
   '5.28.1' => 'https://cpan.metacpan.org/authors/id/S/SH/SHAY/perl-5.28.1.tar.gz',
@@ -153,15 +153,19 @@ foreach my $perl_version (qw( 5.12.5 5.10.1 5.10.0 5.8.9 5.8.8 5.8.7 5.8.6 5.8.5
 
 foreach my $flag (qw( threads longdouble quadmath ))
 {
-  foreach my $perl_version ('5.14.4', $latest_stable)
+  foreach my $perl_version ('5.8.1', '5.8.8', '5.10.0', '5.10.1', '5.14.4', $latest_stable)
   {
+    next if $flag ne 'threads' && $perl_version =~ /^(5\.8|5\.10)\./;
     next if $flag eq 'quadmath' && $perl_version eq '5.14.4';
+    my $old;
+    $old = '5.24.4' if $perl_version =~ /^(5\.8|5\.10)\./;
     my $tag = "$perl_version-stretch-$flag";
     my @aliases;
     push @aliases, "$perl_version-$flag";
     push @aliases, ($perl_version =~ s/\.[0-9]+$//r) . "-$flag";
     push @aliases, ($perl_version =~ s/\.[0-9]+$//r) . "-stretch-$flag";
     generate_dockerfile($tag, \@aliases,
+      old          => $old,
       perl_flags   => "-Duse$flag",
       dist_release => 'stretch',
       perl_version => $perl_version,
