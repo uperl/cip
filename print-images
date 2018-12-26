@@ -1,0 +1,51 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+use 5.010;
+use JSON::MaybeXS qw( decode_json );
+use Capture::Tiny qw( capture );
+
+my($stdout, $stderr) = capture {
+  system 'docker', 'image', 'ls', '--format', '{{json .}}';
+};
+
+my %images;
+
+foreach my $image_line (split /\n/, $stdout)
+{
+  my $image = decode_json($image_line);
+  next unless $image->{Repository} eq 'plicease/ciperl';
+  push @{ $images{$image->{ID}}->{tags} }, $image->{Tag};
+  $images{$image->{ID}}->{long} = $image->{Tag} if (!defined $images{$image->{ID}}->{long}) || (length($image->{Tag}) > length($images{$image->{ID}}->{long}));
+  $images{$image->{ID}}->{id} = $image->{ID};
+}
+
+my %major;
+my $count;
+
+foreach my $image (values %images)
+{
+  my($version, $extra) = split /-/, $image->{long}, 2;
+  $extra //= '';
+  my @version = split /\./, $version;
+  $version[1] //= 0;
+  $version[2] //= 0;
+  my $sort_id = sprintf "%d%03d%03d-%s", @version, $extra;
+  $sort_id =~ s/-$//;
+  $image->{sort} = $sort_id;
+
+  push @{ $major{$version[1]} }, $image;
+  $count++;
+}
+
+foreach my $major (sort { $a <=> $b } keys %major)
+{
+  say " * 5.$major";
+  foreach my $image (sort { $a->{long} cmp $b->{long} } @{ $major{$major} })
+  {
+    printf "   + %-25s %s %s\n", $image->{long}, $image->{id}, join ", ", sort @{ $image->{tags} };
+  }
+}
+
+say "unique images: $count";

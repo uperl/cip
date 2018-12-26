@@ -17,6 +17,7 @@ RUN apt-get update \
        patch \
        xz-utils \
        zlib1g-dev \
+       pkg-config \
   && apt-get -qy autoremove \
   && apt-get -qy clean \
   && rm -rf /var/lib/apt/lists/*
@@ -24,9 +25,7 @@ RUN apt-get update \
 RUN mkdir /work
 
 ENV PLICEASE_DZIL_NO_GIT 1
-[% IF tz %]
-ENV TZ [% tz %]
-[% END %]
+ENV TZ America/Denver
 
 WORKDIR /work
 

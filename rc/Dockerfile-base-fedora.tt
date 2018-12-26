@@ -17,7 +17,7 @@ RUN yum install -y \
 RUN mkdir /work
 
 ENV PLICEASE_DZIL_NO_GIT 1
-ENV TZ [% tz %]
+ENV TZ America/Denver
 
 WORKDIR /work
 

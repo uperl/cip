@@ -9,7 +9,7 @@ RUN curl https://raw.githubusercontent.com/tokuhirom/Perl-Build/master/perl-buil
 
 
 
-RUN curl https://cpanmin.us | /opt/perl/5.14.4/bin/perl5.14.4 - App::cpanminus && rm -rf ~/.cpanm
+RUN curl https://cpanmin.us | /opt/perl/5.14.4/bin/perl - App::cpanminus && rm -rf ~/.cpanm
 
 
 
