@@ -145,6 +145,8 @@ case "$command" in
       sleep infinity
     case "$command" in
       before_install|before-install)
+        echo "+docker version"
+        docker version
         echo "+docker image ls"
         docker image ls
         echo "+docker ps"
