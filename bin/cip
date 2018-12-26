@@ -143,6 +143,14 @@ case "$command" in
       -d \
       plicease/ciperl:$CIP_TAG \
       sleep infinity
+    case "$command" in
+      before_install|before-install)
+        echo "+docker image ls"
+        docker image ls
+        echo "+docker ps"
+        docker ps
+      ;;
+    esac
     cip exec cpanm -n --reinstall App::cpanminus
     if [ -f maint/cip-before-install ]; then
       ./maint/cip-before-install
@@ -159,6 +167,9 @@ case "$command" in
       ./maint/cip-install
     elif [ -f dist.ini ]; then
       echo ":::: DZIL DEPS   ::::"
+      if [ -f alienfile ]; then
+        cip sudo bash -c 'dzil-af missing | dzil-cpanm -n'
+      fi
       cip sudo bash -c 'dzil-dzil authordeps --missing | dzil-cpanm -n'
       echo ":::: DZIL BUILD  ::::"
       cip exec dzil-dzil build
