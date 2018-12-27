@@ -237,7 +237,7 @@ case "$command" in
       echo "+ make"
       cip exec make
       echo "+ env PERL_USE_UNSAFE_INC=0 make test TEST_VERBOSE=1"
-      cip exec env PERL_USE_UNSAFE_INC=0 make test TEST_VERBOSE=1t
+      cip exec env PERL_USE_UNSAFE_INC=0 make test TEST_VERBOSE=1
     elif [ -f Build.PL ]; then
       if [ "x$CIP_ENV" == "x" ]; then
         echo "+ perl Build.PL"
