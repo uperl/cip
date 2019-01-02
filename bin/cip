@@ -283,7 +283,7 @@ case "$command" in
       name=$( echo $name | jq -r . )
       if echo $name | grep -q ^cip- ; then
         docker stop /$name
-        docker stop /$name
+        docker container rm /$name
       fi
     done
     ;;
