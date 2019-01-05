@@ -58,3 +58,28 @@ ADD rc/dzil-af    /opt/perl/[% perl_version %]/bin
 [% END %]
 
 RUN chmod +x /opt/perl/[% perl_version %]/bin/dzil-*
+
+[% IF ffimaster %]
+
+RUN apt-get update                                                                    \
+ && apt-get install -y                                                                \
+      autoconf                                                                        \
+      automake                                                                        \
+      libtool                                                                         \
+      texinfo                                                                         \
+ && apt-get -qy autoremove                                                            \
+ && apt-get -qy clean                                                                 \
+ && rm -rf /var/lib/apt/lists/*                                                       \
+ && cd /usr/src                                                                       \
+ && curl https://codeload.github.com/libffi/libffi/tar.gz/master | tar zxvf -         \
+ && cd libffi-master                                                                  \
+ && ./autogen.sh                                                                      \
+ && ./configure --prefix=/opt/libffi --disable-shared && make && make install         \
+ && cd .. && rm -rf libffi-master                                                     \
+ && apt-get -qy purge autoconf automake libtool texinfo                               \
+ && apt-get -qy autoremove                                                            \
+ && apt-get -qy clean
+
+ENV PKG_CONFIG_PATH /opt/libffi/lib/pkgconfig
+
+[% END %]
