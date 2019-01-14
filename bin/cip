@@ -36,6 +36,9 @@ subcommands:
   cip exec [command [ ... ] ]
     - exec command in container as user
 
+  cip exec-background [command [ ... ] ]
+    - exec command in the background
+
   cip bash [ ... ]
   cip tcsh [ ... ]
   cip perl [ ... ]
@@ -197,29 +200,9 @@ case "$command" in
       if [ -f "$CIP_DIST_DIR/maint/cip-test" ]; then
         cip bash -c "cd $CIP_DIST_DIR; env PERL_USE_UNSAFE_INC=0 $CIP_ENV ./maint/cip-test"
       elif [ -f "$CIP_DIST_DIR/Makefile.PL" ]; then
-        if [ "x$CIP_ENV" == "x" ]; then
-          echo "+ perl Makefile.PL"
-          cip exec bash -c "cd $CIP_DIST_DIR; perl Makefile.PL"
-        else
-          echo "+ env $CIP_ENV perl Makefile.PL"
-          cip exec bash -c "cd $CIP_DIST_DIR; env $CIP_ENV perl Makefile.PL"
-        fi
-        echo "+ make"
-        cip exec bash -c "cd $CIP_DIST_DIR; make"
-        echo "+ env PERL_USE_UNSAFE_INC=0 make test TEST_VERBOSE=1"
-        cip exec bash -c "cd $CIP_DIST_DIR; env PERL_USE_UNSAFE_INC=0 make test TEST_VERBOSE=1"
+        cip exec env PERL_USE_UNSAFE_INC=0 $CIP_ENV bash -c "set -ex; cd $CIP_DIST_DIR; perl Makefile.PL; make; make test TEST_VERBOSE=1"
       elif [ -f "$CIP_DIST_DIR/Build.PL" ]; then
-        if [ "x$CIP_ENV" == "x" ]; then
-          echo "+ perl Build.PL"
-          cip exec bash -c "cd $CIP_DIST_DIR; perl Build.PL"
-        else
-          echo "+ env $CIP_ENV perl Build.PL"
-          cip exec bash -c "cd $CIP_DIST_DIR; env $CIP_ENV perl Build.PL"
-        fi
-        echo "+ ./Build"
-        cip exec bash -c "cd $CIP_DIST_DIR; ./Build"
-        echo "+ env PERL_USE_UNSAFE_INC=0 ./Build test verbose=1"
-        cip exec bash -c "cd $CIP_DIST_DIR; env PERL_USE_UNSAFE_INC=0 ./Build test verbose=1"
+        cip exec env PERL_USE_UNSAFE_INC=0 $CIP_ENV bash -c "set -ex; cd $CIP_DIST_DIR; perl Build.PL; ./Build; ./Build test verbose=1"
       else
         echo "unknown installer (dzil)"
         exit 2;
@@ -227,32 +210,11 @@ case "$command" in
     elif [ -f maint/cip-test ]; then
       cip bash -c 'env PERL_USE_UNSAFE_INC=0 ./maint/cip-test'
     elif [ -f Makefile.PL ]; then
-      if [ "x$CIP_ENV" == "x" ]; then
-        echo "+ perl Makefile.PL"
-        cip exec perl Makefile.PL
-      else
-        echo "+ env $CIP_ENV perl Makefile.PL"
-        cip exec env $CIP_ENV perl Makefile.PL
-      fi
-      echo "+ make"
-      cip exec make
-      echo "+ env PERL_USE_UNSAFE_INC=0 make test TEST_VERBOSE=1"
-      cip exec env PERL_USE_UNSAFE_INC=0 make test TEST_VERBOSE=1
+      cip exec env PERL_USE_UNSAFE_INC=0 $CIP_ENV bash -c "set -ex; perl Makefile.PL; make; make test TEST_VERBOSE=1"
     elif [ -f Build.PL ]; then
-      if [ "x$CIP_ENV" == "x" ]; then
-        echo "+ perl Build.PL"
-        cip exec perl Build.PL
-      else
-        echo "+ env $CIP_ENV perl Build.PL"
-        cip exec env $CIP_ENV perl Build.PL
-      fi
-      echo "+ ./Build"
-      cip exec ./Build
-      echo "+ env PERL_USE_UNSAFE_INC=0 ./Build test verbose=1"
-      cip exec env PERL_USE_UNSAFE_INC=0 ./Build test verbose=1
+      cip exec env PERL_USE_UNSAFE_INC=0 $CIP_ENV bash -c "set -ex; perl Build.PL; ./Build; ./Build test verbose=1"
     elif [ -d t ]; then
-      echo "+ env PERL_USE_UNSAFE_INC=0 prove -lvm"
-      cip exec env PERL_USE_UNSAFE_INC=0 prove -lvm
+      cip exec env PERL_USE_UNSAFE_INC=0 $CIP_ENV bash -c "set -ex; prove -lvm"
     else
       echo "unknown instaler"
       exit 2;
@@ -268,9 +230,18 @@ case "$command" in
     docker exec $CIP_LOCAL_LIB -e PERL_MB_OPT="--install_base /home/cip/perl5" -u 1000 $CIP_CONT "$@"
     ;;
 
+  exec-background)
+    cip_local_lib
+    docker exec -d $CIP_LOCAL_LIB -e PERL_MB_OPT="--install_base /home/cip/perl5" -u 1000 $CIP_CONT "$@"
+    ;;
+
   bash|tcsh|perl|nano)
     cip_local_lib
-    docker exec $CIP_LOCAL_LIB -e PERL_MB_OPT="--install_base /home/cip/perl5" -it -u 1000 $CIP_CONT $command "$@"
+    if [ "x$CIP_ENV" == "x" ]; then
+      docker exec $CIP_LOCAL_LIB -e PERL_MB_OPT="--install_base /home/cip/perl5" -it -u 1000 $CIP_CONT $command "$@"
+    else
+      docker exec $CIP_LOCAL_LIB -e PERL_MB_OPT="--install_base /home/cip/perl5" -it -u 1000 $CIP_CONT env $CIP_ENV $command "$@"
+    fi
     ;;
 
   stop)
