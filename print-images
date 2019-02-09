@@ -16,6 +16,7 @@ foreach my $image_line (split /\n/, $stdout)
 {
   my $image = decode_json($image_line);
   next unless $image->{Repository} eq 'plicease/ciperl';
+  next if  $image->{Tag} eq '<none>';
   push @{ $images{$image->{ID}}->{tags} }, $image->{Tag};
   $images{$image->{ID}}->{long} = $image->{Tag} if (!defined $images{$image->{ID}}->{long}) || (length($image->{Tag}) > length($images{$image->{ID}}->{long}));
   $images{$image->{ID}}->{id} = $image->{ID};
