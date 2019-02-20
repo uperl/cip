@@ -16,7 +16,7 @@ RUN  mkdir /tmp/perl-build \
   && curl -O [% perl_source %] \
   && tar xvf perl-[% perl_version %].tar.gz \
   && cd perl-[% perl_version %] \
-  && ./Configure -des -Dprefix=/opt/perl/[% perl_version %] \
+  && ./Configure -des [% IF perl_flags %][% perl_flags %] [% END %]-Dprefix=/opt/perl/[% perl_version %] \
   && make \
   && make install \
   && cd / \

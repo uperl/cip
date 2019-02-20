@@ -145,7 +145,7 @@ case "$command" in
       -v ~/.cip/dzil-cache/"$CIP_TAG":/home/cip/dzil \
       -d \
       plicease/ciperl:$CIP_TAG \
-      sleep infinity
+      sleep 86400
     case "$command" in
       before_install|before-install)
         echo "+docker version"

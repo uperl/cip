@@ -1,4 +1,4 @@
-FROM [% dist %]:[% dist_version %]
+FROM alpine:3.9
 LABEL maintainer="Graham Ollis <plicease@cpan.org>"
 
 RUN apk add --no-cache \

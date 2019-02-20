@@ -62,24 +62,24 @@ my %perl_sources = (
     }
   }
 
-  #my %alpine = (
-  #  alpine => [ '3.8' ],
-  #);
-  #foreach my $dist (sort keys %alpine)
-  #{
-  #  foreach my $dist_version (sort $alpine{$dist}->@*)
-  #  {
-  #    my $dist_release = "$dist$dist_version";
-  #    my $path = path('base/versions')->child($dist_release);
-  #    $path->mkpath;
-  #    $path = $path->child('Dockerfile');
-  #    $tt->process(
-  #      "rc/Dockerfile-base-alpine.tt",
-  #      { dist => $dist, dist_version => $dist_version, %{ $extra{$dist_release} // {} } },
-  #      "$path"
-  #    ) || die $tt->error
-  #  }
-  #}
+  my %alpine = (
+    alpine => [ '3.9' ],
+  );
+  foreach my $dist (sort keys %alpine)
+  {
+    foreach my $dist_version (sort $alpine{$dist}->@*)
+    {
+      my $dist_release = "$dist$dist_version";
+      my $path = path('base/versions')->child($dist_release);
+      $path->mkpath;
+      $path = $path->child('Dockerfile');
+      $tt->process(
+        "rc/Dockerfile-base-alpine.tt",
+        { dist => $dist, dist_version => $dist_version, %{ $extra{$dist_release} // {} } },
+        "$path"
+      ) || die $tt->error
+    }
+  }
 }
 
 sub generate_dockerfile
@@ -192,13 +192,13 @@ foreach my $perl_version ($latest_stable)
 
 foreach my $perl_version ($latest_stable)
 {
-  foreach my $dist_release (qw( bionic buster jessie xenial centos7 fedora29 ))
+  foreach my $dist_release (qw( bionic buster jessie xenial centos7 fedora29  ))
   {
     my $tag = "$perl_version-$dist_release";
     my @aliases;
     push @aliases, ($perl_version =~ s/\.[0-9]+$//r) . "-$dist_release";
     my $no_perl = 0;
-    $no_perl = 1 if $dist_release =~ /^(fedora|centos|alpine)/;
+    $no_perl = 1 if $dist_release =~ /^(fedora|centos)/;
     generate_dockerfile($tag, \@aliases,
       no_perl      => $no_perl,
       dist_release => $dist_release,
@@ -208,4 +208,24 @@ foreach my $perl_version ($latest_stable)
   }
 }
 
-
+# dists that need a threaded build
+foreach my $perl_version ($latest_stable)
+{
+  foreach my $dist_release (qw( alpine3.9 ))
+  {
+    my $tag = "$perl_version-$dist_release-threads";
+    my @aliases;
+    push @aliases, "$perl_version-$dist_release";
+    push @aliases, ($perl_version =~ s/\.[0-9]+$//r) . "-$dist_release-threads";
+    push @aliases, ($perl_version =~ s/\.[0-9]+$//r) . "-$dist_release";
+    my $no_perl = 0;
+    $no_perl = 1 if $dist_release =~ /^(alpine)/;
+    generate_dockerfile($tag, \@aliases,
+      no_perl      => $no_perl,
+      dist_release => $dist_release,
+      perl_version => $perl_version,
+      perl_source  => $perl_sources{$perl_version},
+      perl_flags   => "-Dusethreads",
+    );
+  }
+}
