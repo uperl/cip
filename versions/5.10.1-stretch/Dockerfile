@@ -11,7 +11,7 @@ RUN curl https://raw.githubusercontent.com/tokuhirom/Perl-Build/master/perl-buil
 
 RUN curl https://cpanmin.us | /opt/perl/5.10.1/bin/perl - App::cpanminus && rm -rf ~/.cpanm
 
-ENV PATH /opt/perl/5.10.1/bin:$PATH
+ENV PATH /opt/perl/5.10.1/bin:/home/cip/bin:/home/cip/.cargo/bin:$PATH
 
 ADD rc/dzil-old-cpanm /opt/perl/5.10.1/bin/dzil-cpanm
 ADD rc/dzil-old-dzil  /opt/perl/5.10.1/bin/dzil-dzil

@@ -9,6 +9,7 @@ use File::chdir;
 use Path::Tiny qw( path );
 
 my $tt = Template->new;
+my $stable        = 'stretch';
 my $latest_stable = '5.28.1';
 my $latest_dev    = '5.29.7';
 
@@ -117,9 +118,9 @@ foreach my $perl_version (qw( 5.28.1 5.26.3 5.24.4 5.22.4 5.20.3 5.18.4 5.16.3 5
   my @aliases;
   push @aliases, $perl_version;
   push @aliases, $perl_version =~ s/\.[0-9]+$//r;
-  push @aliases, ($perl_version =~ s/\.[0-9]+$//r) . "-stretch";
-  generate_dockerfile("$perl_version-stretch", \@aliases,
-    dist_release => 'stretch',
+  push @aliases, ($perl_version =~ s/\.[0-9]+$//r) . "-$stable";
+  generate_dockerfile("$perl_version-$stable", \@aliases,
+    dist_release => $stable,
     perl_version => $perl_version,
   );
 }
@@ -129,8 +130,8 @@ foreach my $perl_version ($latest_dev)
   my @aliases;
   push @aliases, $perl_version;
   push @aliases, $perl_version =~ s/\.[0-9]+$//r;
-  generate_dockerfile("$perl_version-stretch", \@aliases,
-    dist_release => 'stretch',
+  generate_dockerfile("$perl_version-$stable", \@aliases,
+    dist_release => $stable,
     perl_dev     => 1,
     perl_flags   => '-Dusedevel',
     perl_version => $perl_version,
@@ -144,11 +145,11 @@ foreach my $perl_version (qw( 5.12.5 5.10.1 5.10.0 5.8.9 5.8.8 5.8.7 5.8.6 5.8.5
   if($perl_version !~ /^5.8/ || $perl_version eq '5.8.8')
   {
     push @aliases, $perl_version =~ s/\.[0-9]+$//r;
-    push @aliases, ($perl_version =~ s/\.[0-9]+$//r) . "-stretch";
+    push @aliases, ($perl_version =~ s/\.[0-9]+$//r) . "-$stable";
   }
-  generate_dockerfile("$perl_version-stretch", \@aliases,
+  generate_dockerfile("$perl_version-$stable", \@aliases,
     old          => '5.24.4',
-    dist_release => 'stretch',
+    dist_release => $stable,
     perl_version => $perl_version,
   );
 }
@@ -161,15 +162,15 @@ foreach my $flag (qw( threads longdouble quadmath ))
     next if $flag eq 'quadmath' && $perl_version eq '5.14.4';
     my $old;
     $old = '5.24.4' if $perl_version =~ /^(5\.8|5\.10)\./;
-    my $tag = "$perl_version-stretch-$flag";
+    my $tag = "$perl_version-$stable-$flag";
     my @aliases;
     push @aliases, "$perl_version-$flag";
     push @aliases, ($perl_version =~ s/\.[0-9]+$//r) . "-$flag";
-    push @aliases, ($perl_version =~ s/\.[0-9]+$//r) . "-stretch-$flag";
+    push @aliases, ($perl_version =~ s/\.[0-9]+$//r) . "-$stable-$flag";
     generate_dockerfile($tag, \@aliases,
       old          => $old,
       perl_flags   => "-Duse$flag",
-      dist_release => 'stretch',
+      dist_release => $stable,
       perl_version => $perl_version,
     );
   }
@@ -177,13 +178,13 @@ foreach my $flag (qw( threads longdouble quadmath ))
 
 foreach my $perl_version ($latest_stable)
 {
-  my $tag = "$perl_version-stretch-ffimaster";
+  my $tag = "$perl_version-$stable-ffimaster";
   my @aliases;
   push @aliases, "$perl_version-ffimaster";
-  push @aliases, ($perl_version =~ s/\.[0-9]+$//r) . "-stretch-ffimaster";
+  push @aliases, ($perl_version =~ s/\.[0-9]+$//r) . "-$stable-ffimaster";
   push @aliases, ($perl_version =~ s/\.[0-9]+$//r) . "-ffimaster";
   generate_dockerfile($tag, \@aliases,
-    dist_release => 'stretch',
+    dist_release => $stable,
     perl_version => $perl_version,
     ffimaster    => 1,
   );
