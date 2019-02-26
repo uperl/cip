@@ -50,7 +50,18 @@ subcommands:
 
   cip stop_all
   cip stop-all
-    - stop all background cip containers
+  cip clean_all
+  cip clean-all
+    - stop all background cip containes and remove scn images
+
+  cip scn build
+    - build scn images
+
+  cip scn run [ test-name ]
+    - run scn tests
+
+  cip scn clean
+    - remove all scn images
 
 environment:
 
@@ -193,6 +204,69 @@ case "$command" in
     fi
     ;;
 
+  scn)
+
+    if [ -z "$1" ]; then
+      scn_command="run"
+    else
+      scn_command=$1
+      shift
+    fi
+    
+    if [ -d t/cip ]; then
+
+      case "$scn_command" in
+
+        build)
+          for dirname in t/cip/*; do
+            test=$(basename $dirname)
+            if [ -f "t/cip/$test/Dockerfile" ]; then
+              echo +docker build -f t/cip/$test/Dockerfile . --build-arg cip_tag=$CIP_TAG -t scn-$test:$CIP_TAG
+              docker build -f t/cip/$test/Dockerfile . --build-arg cip_tag=$CIP_TAG -t scn-$test:$CIP_TAG
+            fi
+          done
+          ;;
+
+        run)
+          if [ -z "$1" ]; then
+            for dirname in t/cip/*; do
+              cip scn run-single $(basename $dirname)
+            done
+          else
+            cip scn run-single $1
+          fi
+          ;;
+
+        run-single)
+          test=$1
+          if [ -f "t/cip/$test/Dockerfile" ]; then
+            echo +docker run -t --rm scn-$test:$CIP_TAG
+            docker run -t --rm scn-$test:$CIP_TAG
+          else
+            echo "no test $test"
+            exit 2
+          fi
+          ;;
+
+        clean)
+          docker images "scn-*" --format '{{json .}}' | while read -r line ; do
+            id=$(echo $line | jq -r .ID )
+            docker image rm $id
+          done
+          ;;
+
+        *)
+          echo "unknown scn subcommand: $scn_command"
+          exit 2
+          ;;
+        
+      esac
+       
+    else
+      echo "no t/cip directory";
+    fi
+    ;;
+
   script|test)
     cip_local_lib
     if [ -f dist.ini ]; then
@@ -249,7 +323,8 @@ case "$command" in
     docker container rm /$CIP_CONT
     ;;
 
-  stop_all|stop-all)
+  stop_all|stop-all|clean_all|clean-all)
+    cip scn clean
     for name in $( docker ps --format '{{json .Names}}' ) ; do
       name=$( echo $name | jq -r . )
       if echo $name | grep -q ^cip- ; then
