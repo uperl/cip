@@ -212,7 +212,7 @@ case "$command" in
       scn_command=$1
       shift
     fi
-    
+
     if [ -d t/cip ]; then
 
       case "$scn_command" in
@@ -259,9 +259,9 @@ case "$command" in
           echo "unknown scn subcommand: $scn_command"
           exit 2
           ;;
-        
+
       esac
-       
+
     else
       echo "no t/cip directory";
     fi
