@@ -37,7 +37,7 @@ RUN chmod +x /opt/refileutils/bin/reln-wrapper
 RUN ln -s /opt/refileutils/bin/reln-wrapper /opt/perl/[% perl_version %]/bin/reln
 [% END %]
 
-ENV PATH /opt/perl/[% perl_version %]/bin:/home/cip/bin:/home/cip/.cargo/bin:$PATH
+ENV PATH /opt/perl/[% perl_version %]/bin:/home/cip/bin:/home/cip/.cargo/bin:/usr/local/go/bin:$PATH
 
 [% IF perl_dev %]
 RUN bash -c 'cd /opt/perl/[% perl_version %]/bin; reln -s "s/[% perl_version %]$//"'
