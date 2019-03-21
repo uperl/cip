@@ -26,6 +26,7 @@ RUN mkdir /work
 
 ENV PLICEASE_DZIL_NO_GIT 1
 ENV TZ America/Denver
+ENV PERL_CPANM_OPT --no-man-pages
 
 WORKDIR /work
 
