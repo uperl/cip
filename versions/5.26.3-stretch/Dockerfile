@@ -5,7 +5,7 @@ RUN curl https://raw.githubusercontent.com/tokuhirom/Perl-Build/master/perl-buil
 
 RUN curl https://cpanmin.us | /opt/perl/5.26.3/bin/perl - App::cpanminus && rm -rf ~/.cpanm
 
-ENV PATH /opt/perl/5.26.3/bin:/home/cip/bin:/home/cip/.cargo/bin:$PATH
+ENV PATH /opt/perl/5.26.3/bin:/home/cip/bin:/home/cip/.cargo/bin:/usr/local/go/bin:$PATH
 
 RUN cpanm -n -L /opt/dzil Dist::Zilla && rm -rf ~/.cpanm
 RUN cpanm -n -L /opt/dzil Dist::Zilla::PluginBundle::Author::Plicease && rm -rf ~/.cpanm

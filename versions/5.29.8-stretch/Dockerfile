@@ -10,7 +10,7 @@ ADD rc/reln-wrapper /opt/refileutils/bin/reln-wrapper
 RUN chmod +x /opt/refileutils/bin/reln-wrapper
 RUN ln -s /opt/refileutils/bin/reln-wrapper /opt/perl/5.29.8/bin/reln
 
-ENV PATH /opt/perl/5.29.8/bin:/home/cip/bin:/home/cip/.cargo/bin:$PATH
+ENV PATH /opt/perl/5.29.8/bin:/home/cip/bin:/home/cip/.cargo/bin:/usr/local/go/bin:$PATH
 
 RUN bash -c 'cd /opt/perl/5.29.8/bin; reln -s "s/5.29.8$//"'
 
