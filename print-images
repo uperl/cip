@@ -23,7 +23,7 @@ foreach my $image_line (split /\n/, $stdout)
 }
 
 my %major;
-my $count;
+my $count = 0;
 
 foreach my $image (values %images)
 {
