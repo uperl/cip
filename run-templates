@@ -15,6 +15,7 @@ my $latest_dev    = '5.29.10';
 
 my %perl_sources = (
   '5.28.1' => 'https://cpan.metacpan.org/authors/id/S/SH/SHAY/perl-5.28.1.tar.gz',
+  '5.28.2' => 'https://cpan.metacpan.org/authors/id/S/SH/SHAY/perl-5.28.2.tar.gz',
 );
 
 # build the Dockerfiles for the base images
