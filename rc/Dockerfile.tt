@@ -28,7 +28,7 @@ RUN curl https://raw.githubusercontent.com/tokuhirom/Perl-Build/master/perl-buil
 
 [% END %]
 
-RUN curl https://cpanmin.us | /opt/perl/[% perl_version %]/bin/perl[% IF perl_dev %][% perl_version %][% END %] - App::cpanminus && rm -rf ~/.cpanm
+RUN curl https://cpanmin.us | /opt/perl/[% perl_version %]/bin/perl[% IF perl_suffix %][% perl_suffix %][% END %] - App::cpanminus && rm -rf ~/.cpanm
 
 [% IF perl_dev %]
 RUN /opt/perl/[% perl_version %]/bin/cpanm -n -L /opt/refileutils App::RegexFileUtils
@@ -40,7 +40,7 @@ RUN ln -s /opt/refileutils/bin/reln-wrapper /opt/perl/[% perl_version %]/bin/rel
 ENV PATH /opt/perl/[% perl_version %]/bin:/home/cip/bin:/home/cip/.cargo/bin:/usr/local/go/bin:$PATH
 
 [% IF perl_dev %]
-RUN bash -c 'cd /opt/perl/[% perl_version %]/bin; reln -s "s/[% perl_version %]$//"'
+RUN bash -c 'cd /opt/perl/[% perl_version %]/bin; reln -s "s/[% perl_suffix %]$//"'
 [% END %]
 
 [% IF old %]

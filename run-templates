@@ -11,7 +11,7 @@ use Path::Tiny qw( path );
 my $tt = Template->new;
 my $stable        = 'stretch';
 my $latest_stable = '5.28.2';
-my $latest_dev    = '5.29.10';
+my $latest_dev    = '5.30.0-RC2';
 
 my %perl_sources = (
   '5.28.1' => 'https://cpan.metacpan.org/authors/id/S/SH/SHAY/perl-5.28.1.tar.gz',
@@ -131,9 +131,18 @@ foreach my $perl_version ($latest_dev)
   my @aliases;
   push @aliases, $perl_version;
   push @aliases, $perl_version =~ s/\.[0-9]+$//r;
+  my $rc = 0;
+  if($perl_version =~ /-RC[0-9]/)
+  {
+    $rc = 1;
+    push @aliases, $perl_version =~ s/\.[0-9]+-RC[0-9]+$//r;
+    push @aliases, $perl_version =~ s/-RC[0-9]+$//r . "-$stable";
+    push @aliases, $perl_version =~ s/\.[0-9]+-RC[0-9]+$//r . "-$stable";
+  }
   generate_dockerfile("$perl_version-$stable", \@aliases,
     dist_release => $stable,
     perl_dev     => 1,
+    perl_suffix  => $perl_version =~ s/(-RC[0-9]+|)$//r,
     perl_flags   => '-Dusedevel',
     perl_version => $perl_version,
   );
