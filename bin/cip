@@ -138,7 +138,8 @@ EOF
 mkdir -p ~/.cip/install-cache/$CIP_TAG
 mkdir -p ~/.cip/dzil-cache/$CIP_TAG
 if [ "x$TRAVIS" == "xtrue" ]; then
-  echo placeholder
+  find ~/.cip/dzil-cache    | xargs sudo chown -R 0:0
+  find ~/.cip/install-cache | xargs sudo chown -R 1000:1000
 fi
 
 case "$command" in
@@ -172,7 +173,7 @@ case "$command" in
     # there may be a breaking change between minor versions in a dev release
     # so it would be better to detect that change and clear the cache.
     cip bash -c 'id'
-    cip bash -c 'curl https://cpanmin.us | perl - -n -v --reinstall App::cpanminus'
+    cip bash -c 'curl https://cpanmin.us | perl - -n --reinstall App::cpanminus'
     if [ -f maint/cip-before-install ]; then
       ./maint/cip-before-install
     fi
