@@ -138,8 +138,8 @@ EOF
 mkdir -p ~/.cip/install-cache/$CIP_TAG
 mkdir -p ~/.cip/dzil-cache/$CIP_TAG
 if [ "x$TRAVIS" == "xtrue" ]; then
-  chmod 777 ~/.cip/install-cache/$CIP_TAG
-  chmod 777 ~/.cip/dzil-cache/$CIP_TAG
+  #chmod 777 ~/.cip/install-cache/$CIP_TAG
+  #chmod 777 ~/.cip/dzil-cache/$CIP_TAG
 fi
 
 case "$command" in
