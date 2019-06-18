@@ -172,7 +172,7 @@ case "$command" in
     # may have changed and we may have a cached local::lib.  It's possible that
     # there may be a breaking change between minor versions in a dev release
     # so it would be better to detect that change and clear the cache.
-    cip bash -c 'curl https://cpanmin.us | perl - -n --reinstall App::cpanminus'
+    cip bash -c 'curl https://cpanmin.us | perl - -n -v --reinstall App::cpanminus'
     if [ -f maint/cip-before-install ]; then
       ./maint/cip-before-install
     fi
