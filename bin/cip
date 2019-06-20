@@ -138,8 +138,8 @@ EOF
 mkdir -p ~/.cip/install-cache/$CIP_TAG
 mkdir -p ~/.cip/dzil-cache/$CIP_TAG
 if [ "x$TRAVIS" == "xtrue" ]; then
-  find ~/.cip/dzil-cache    -print0 | xargs -0 sudo chown -R 0:0
-  find ~/.cip/install-cache -print0 | xargs -0 sudo chown -R 1000:1000
+  find ~/.cip/dzil-cache    -print0 | xargs -0 -L 300 sudo chown -R 0:0
+  find ~/.cip/install-cache -print0 | xargs -0 -L 300 sudo chown -R 1000:1000
 fi
 
 case "$command" in
