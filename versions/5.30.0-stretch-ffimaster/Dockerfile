@@ -18,13 +18,13 @@ ADD rc/dzil-af    /opt/perl/5.30.0/bin
 RUN chmod +x /opt/perl/5.30.0/bin/dzil-*
 
 RUN apt-get update                                                                    \
- && apt-get install -y                                                                \
+ && apt-get install                                                                   \
       autoconf                                                                        \
       automake                                                                        \
       libtool                                                                         \
       texinfo                                                                         \
- && apt-get -qy autoremove                                                            \
- && apt-get -qy clean                                                                 \
+ && apt-get -q autoremove                                                             \
+ && apt-get -q  clean                                                                 \
  && rm -rf /var/lib/apt/lists/*                                                       \
  && cd /usr/src                                                                       \
  && curl https://codeload.github.com/libffi/libffi/tar.gz/master | tar zxvf -         \
@@ -32,9 +32,12 @@ RUN apt-get update                                                              
  && ./autogen.sh                                                                      \
  && ./configure --prefix=/opt/libffi --disable-shared && make && make install         \
  && cd .. && rm -rf libffi-master                                                     \
- && apt-get -qy purge autoconf automake libtool texinfo                               \
- && apt-get -qy autoremove                                                            \
- && apt-get -qy clean
+ && apt-get -q purge autoconf automake libtool texinfo                                \
+ && apt-get -q autoremove                                                             \
+ && apt-get -q clean
 
 ENV PKG_CONFIG_PATH /opt/libffi/lib/pkgconfig
+ENV CI true
+ENV CIPSOMETHING true
+ENV CONTINUOUS_INTEGRATION true
 

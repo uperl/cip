@@ -1,8 +1,12 @@
 FROM ubuntu:bionic
 LABEL maintainer="Graham Ollis <plicease@cpan.org>"
 
-RUN apt-get update \
-  && apt-get install -y --no-install-recommends \
+ENV DEBIAN_FRONTEND noninteractive
+
+
+RUN  echo 'APT::Get::Assume-Yes "true";' >> /etc/apt/apt.conf.d/00cip  \
+  && apt-get update \
+  && apt-get install --no-install-recommends \
        nano \
        tcsh \
        bzip2 \
@@ -18,8 +22,8 @@ RUN apt-get update \
        xz-utils \
        zlib1g-dev \
        pkg-config \
-  && apt-get -qy autoremove \
-  && apt-get -qy clean \
+  && apt-get -q autoremove \
+  && apt-get -q clean \
   && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir /work
