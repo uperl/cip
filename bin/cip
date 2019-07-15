@@ -269,7 +269,9 @@ case "$command" in
       esac
 
     else
-      echo "no t/cip directory";
+      if [ -z "$CIP_QUIET" ]; then
+        echo "no t/cip directory";
+      fi
     fi
     ;;
 
@@ -330,7 +332,7 @@ case "$command" in
     ;;
 
   stop_all|stop-all|clean_all|clean-all)
-    cip scn clean
+    env CIP_QUIET=1 cip scn clean
     for name in $( docker ps --format '{{json .Names}}' ) ; do
       name=$( echo $name | jq -r . )
       if echo $name | grep -q ^cip- ; then
