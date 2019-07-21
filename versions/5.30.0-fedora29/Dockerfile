@@ -26,3 +26,7 @@ ADD rc/dzil-af    /opt/perl/5.30.0/bin
 
 RUN chmod +x /opt/perl/5.30.0/bin/dzil-*
 
+ENV CI true
+ENV CIPSOMETHING true
+ENV CONTINUOUS_INTEGRATION true
+EMV CIPDIST fedora29

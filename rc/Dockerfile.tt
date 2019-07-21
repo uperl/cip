@@ -81,8 +81,10 @@ RUN apt-get update                                                              
  && apt-get -q clean
 
 ENV PKG_CONFIG_PATH /opt/libffi/lib/pkgconfig
+
+[% END %]
+
 ENV CI true
 ENV CIPSOMETHING true
 ENV CONTINUOUS_INTEGRATION true
-
-[% END %]
+EMV CIPDIST [% dist_release %]

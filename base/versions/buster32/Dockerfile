@@ -1,4 +1,4 @@
-FROM [% dist %]:[% dist_release %][% IF dist.match('debian') %]-slim[% END %]
+FROM i386/debian:buster-slim
 LABEL maintainer="Graham Ollis <plicease@cpan.org>"
 
 ENV DEBIAN_FRONTEND noninteractive

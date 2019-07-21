@@ -37,7 +37,8 @@ RUN apt-get update                                                              
  && apt-get -q clean
 
 ENV PKG_CONFIG_PATH /opt/libffi/lib/pkgconfig
+
 ENV CI true
 ENV CIPSOMETHING true
 ENV CONTINUOUS_INTEGRATION true
-
+EMV CIPDIST stretch

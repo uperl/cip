@@ -19,3 +19,7 @@ ADD rc/dzil-old-af    /opt/perl/5.8.1/bin/dzil-af
 
 RUN chmod +x /opt/perl/5.8.1/bin/dzil-*
 
+ENV CI true
+ENV CIPSOMETHING true
+ENV CONTINUOUS_INTEGRATION true
+EMV CIPDIST stretch

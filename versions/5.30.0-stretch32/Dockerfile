@@ -1,7 +1,7 @@
-FROM plicease/ciperl-base:stretch
+FROM plicease/ciperl-base:stretch32
 LABEL maintainer="Graham Ollis <plicease@cpan.org>"
 
-RUN curl https://raw.githubusercontent.com/tokuhirom/Perl-Build/master/perl-build | perl - 5.30.0 /opt/perl/5.30.0/ -Dusethreads
+RUN curl https://raw.githubusercontent.com/tokuhirom/Perl-Build/master/perl-build | perl - 5.30.0 /opt/perl/5.30.0/
 
 RUN curl https://cpanmin.us | /opt/perl/5.30.0/bin/perl - App::cpanminus && rm -rf ~/.cpanm
 
@@ -20,4 +20,4 @@ RUN chmod +x /opt/perl/5.30.0/bin/dzil-*
 ENV CI true
 ENV CIPSOMETHING true
 ENV CONTINUOUS_INTEGRATION true
-EMV CIPDIST stretch
+EMV CIPDIST stretch32
