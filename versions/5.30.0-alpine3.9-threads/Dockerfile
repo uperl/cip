@@ -29,4 +29,4 @@ RUN chmod +x /opt/perl/5.30.0/bin/dzil-*
 ENV CI true
 ENV CIPSOMETHING true
 ENV CONTINUOUS_INTEGRATION true
-EMV CIPDIST alpine3.9
+ENV CIPDIST alpine3.9

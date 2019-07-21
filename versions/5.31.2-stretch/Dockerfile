@@ -27,4 +27,4 @@ RUN chmod +x /opt/perl/5.31.2/bin/dzil-*
 ENV CI true
 ENV CIPSOMETHING true
 ENV CONTINUOUS_INTEGRATION true
-EMV CIPDIST stretch
+ENV CIPDIST stretch
