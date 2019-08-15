@@ -9,6 +9,7 @@ ENV PERL_MM_OPT INSTALL_BASE=/opt/dzil
 ENV LANGUAGE en_US.UTF-8
 ENV LANG en_US.UTF-8
 ENV LC_ALL en_US.UTF-8
+ENV CIPSTATIC true
 
 RUN  apt-get update \
   && apt-get install --no-install-recommends \
@@ -45,3 +46,6 @@ RUN cpanm -n https://dist.wdlabs.com/Test2-Tools-PerlCritic-0.01.tar.gz
 
 RUN perl -npE 's/use warnings;/no warnings;/' /opt/dzil/lib/perl5/Pod/Spell.pm > /opt/dzil/lib/perl5/Pod/Spell.pm.nowarn
 RUN mv /opt/dzil/lib/perl5/Pod/Spell.pm.nowarn /opt/dzil/lib/perl5/Pod/Spell.pm
+
+RUN cpanm -n https://cpan.metacpan.org/authors/id/P/PL/PLICEASE/Dist-Zilla-Plugin-Author-Plicease-2.38.tar.gz
+RUN cpanm -n https://cpan.metacpan.org/authors/id/P/PL/PLICEASE/Dist-Zilla-PluginBundle-Author-Plicease-2.38.tar.gz
