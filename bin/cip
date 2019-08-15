@@ -168,6 +168,19 @@ case "$command" in
       plicease/ciperl:$CIP_TAG
   ;;
 
+  check)
+    export CIP_TAG=static
+    docker run \
+      -v `pwd`:/work \
+      -v ~/.cip:/home/cip/.cip \
+      -v ~/.cip/install-cache/"$CIP_TAG":/home/cip/perl5 \
+      -v ~/.cip/dzil-cache/"$CIP_TAG":/home/cip/dzil \
+      --tmpfs /tmp \
+      -it \
+      plicease/ciperl:$CIP_TAG \
+      dzil run --no-build prove -lr xt
+  ;;
+
   before_install|before-install|start)
     docker run \
       --name $CIP_CONT \

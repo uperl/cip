@@ -243,3 +243,17 @@ foreach my $perl_version ($latest_stable)
     );
   }
 }
+
+# default
+{
+  unlink 'versions/default' if -l 'versions/default';
+  symlink "versions/$latest_stable", 'versions/default';
+}
+
+# static
+{
+  mkdir 'versions/static' unless -d 'versions/static';
+  path('versions/static/Dockerfile')->spew(
+    path('rc/Dockerfile.static')->slurp
+  );
+}
