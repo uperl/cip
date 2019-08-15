@@ -54,6 +54,9 @@ subcommands:
   cip clean-all
     - stop all background cip containes and remove scn images
 
+  cip run [ CIP_TAG ]
+    - run shell in a ciperl container with the given tag
+
   cip scn build
     - build scn images
 
@@ -150,6 +153,20 @@ case "$command" in
   travis_yml)
     travis_yml
     ;;
+
+  run)
+    if [ "$1" != "" ]; then
+      export CIP_TAG="$1"
+    fi
+    docker run \
+      -v `pwd`:/work \
+      -v ~/.cip:/home/cip/.cip \
+      -v ~/.cip/install-cache/"$CIP_TAG":/home/cip/perl5 \
+      -v ~/.cip/dzil-cache/"$CIP_TAG":/home/cip/dzil \
+      --tmpfs /tmp \
+      -it \
+      plicease/ciperl:$CIP_TAG
+  ;;
 
   before_install|before-install|start)
     docker run \
