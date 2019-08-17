@@ -163,6 +163,7 @@ case "$command" in
       -v ~/.cip:/home/cip/.cip \
       -v ~/.cip/install-cache/"$CIP_TAG":/home/cip/perl5 \
       -v ~/.cip/dzil-cache/"$CIP_TAG":/home/cip/dzil \
+      --rm \
       --tmpfs /tmp \
       -it \
       plicease/ciperl:$CIP_TAG
@@ -176,6 +177,7 @@ case "$command" in
       -v ~/.cip/install-cache/"$CIP_TAG":/home/cip/perl5 \
       -v ~/.cip/dzil-cache/"$CIP_TAG":/home/cip/dzil \
       --tmpfs /tmp \
+      --rm \
       -it \
       plicease/ciperl:$CIP_TAG \
       dzil run --no-build prove -lr xt
@@ -219,10 +221,10 @@ case "$command" in
 
   diag)
     if [ "$CIP_TAG" == "static" ]; then
-      echo no diag for static
-      exit
+      docker run --rm plicease/ciperl:$CIP_TAG perl -V
+    else
+      cip exec perl -V
     fi
-    cip exec perl -V
     ;;
 
   install)
@@ -253,6 +255,11 @@ case "$command" in
     ;;
 
   scn)
+
+    if [ "$CIP_TAG" == "static" ]; then
+      echo no scn for static
+      exit
+    fi
 
     if [ -z "$1" ]; then
       scn_command="run"
