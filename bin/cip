@@ -182,6 +182,10 @@ case "$command" in
   ;;
 
   before_install|before-install|start)
+    if [ "$CIP_TAG" == "static" ]; then
+      echo no before-install for static
+      exit
+    fi
     docker run \
       --name $CIP_CONT \
       -v `pwd`:/work \
@@ -218,6 +222,10 @@ case "$command" in
     ;;
 
   install)
+    if [ "$CIP_TAG" == "static" ]; then
+      echo no install for static
+      exit
+    fi
     cip_local_lib
     if [ -f maint/cip-install ]; then
       ./maint/cip-install
@@ -306,30 +314,35 @@ case "$command" in
     ;;
 
   script|test)
-    cip_local_lib
-    if [ -f dist.ini ]; then
-      dist_dir_name
-      if [ -f "$CIP_DIST_DIR/maint/cip-test" ]; then
-        cip bash -c "cd $CIP_DIST_DIR; env PERL_USE_UNSAFE_INC=0 $CIP_ENV ./maint/cip-test"
-      elif [ -f "$CIP_DIST_DIR/Makefile.PL" ]; then
-        cip exec env PERL_USE_UNSAFE_INC=0 $CIP_ENV bash -c "set -ex; cd $CIP_DIST_DIR; perl Makefile.PL; make; make test TEST_VERBOSE=1"
-      elif [ -f "$CIP_DIST_DIR/Build.PL" ]; then
-        cip exec env PERL_USE_UNSAFE_INC=0 $CIP_ENV bash -c "set -ex; cd $CIP_DIST_DIR; perl Build.PL; ./Build; ./Build test verbose=1"
+    if [ "$CIP_TAG" == "static" ]; then
+      echo "redirecting to cip check for static analysis"
+      cip check
+    else
+      cip_local_lib
+      if [ -f dist.ini ]; then
+        dist_dir_name
+        if [ -f "$CIP_DIST_DIR/maint/cip-test" ]; then
+          cip bash -c "cd $CIP_DIST_DIR; env PERL_USE_UNSAFE_INC=0 $CIP_ENV ./maint/cip-test"
+        elif [ -f "$CIP_DIST_DIR/Makefile.PL" ]; then
+          cip exec env PERL_USE_UNSAFE_INC=0 $CIP_ENV bash -c "set -ex; cd $CIP_DIST_DIR; perl Makefile.PL; make; make test TEST_VERBOSE=1"
+        elif [ -f "$CIP_DIST_DIR/Build.PL" ]; then
+          cip exec env PERL_USE_UNSAFE_INC=0 $CIP_ENV bash -c "set -ex; cd $CIP_DIST_DIR; perl Build.PL; ./Build; ./Build test verbose=1"
+        else
+          echo "unknown installer (dzil)"
+          exit 2;
+        fi
+      elif [ -f maint/cip-test ]; then
+        cip bash -c 'env PERL_USE_UNSAFE_INC=0 ./maint/cip-test'
+      elif [ -f Makefile.PL ]; then
+        cip exec env PERL_USE_UNSAFE_INC=0 $CIP_ENV bash -c "set -ex; perl Makefile.PL; make; make test TEST_VERBOSE=1"
+      elif [ -f Build.PL ]; then
+        cip exec env PERL_USE_UNSAFE_INC=0 $CIP_ENV bash -c "set -ex; perl Build.PL; ./Build; ./Build test verbose=1"
+      elif [ -d t ]; then
+        cip exec env PERL_USE_UNSAFE_INC=0 $CIP_ENV bash -c "set -ex; prove -lvm"
       else
-        echo "unknown installer (dzil)"
+        echo "unknown instaler"
         exit 2;
       fi
-    elif [ -f maint/cip-test ]; then
-      cip bash -c 'env PERL_USE_UNSAFE_INC=0 ./maint/cip-test'
-    elif [ -f Makefile.PL ]; then
-      cip exec env PERL_USE_UNSAFE_INC=0 $CIP_ENV bash -c "set -ex; perl Makefile.PL; make; make test TEST_VERBOSE=1"
-    elif [ -f Build.PL ]; then
-      cip exec env PERL_USE_UNSAFE_INC=0 $CIP_ENV bash -c "set -ex; perl Build.PL; ./Build; ./Build test verbose=1"
-    elif [ -d t ]; then
-      cip exec env PERL_USE_UNSAFE_INC=0 $CIP_ENV bash -c "set -ex; prove -lvm"
-    else
-      echo "unknown instaler"
-      exit 2;
     fi
     ;;
 
