@@ -218,6 +218,10 @@ case "$command" in
     ;;
 
   diag)
+    if [ "$CIP_TAG" == "static" ]; then
+      echo no diag for static
+      exit
+    fi
     cip exec perl -V
     ;;
 
