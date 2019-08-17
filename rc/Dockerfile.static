@@ -39,13 +39,11 @@ RUN cpanm -n Dist::Zilla::Plugin::AlienBase::Wrapper::Bundle   && rm -rf ~/.cpan
 RUN cpanm -n Dist::Zilla::Plugin::Meta::Dynamic::Config        && rm -rf ~/.cpanm
 RUN cpanm -n Dist::Zilla::Plugin::DynamicPrereqs               && rm -rf ~/.cpanm
 RUN cpanm -n Test::Pod::Spelling::CommonMistakes               && rm -rf ~/.cpanm
-
+RUN cpanm -n Dist::Zilla::PluginBundle::Author::Plicease       && rm -rf ~/.cpanm
+RUN cpanm -n Dist::Zilla::Plugin::MetaProvides::Package        && rm -rf ~/.cpanm
 
 RUN cpanm -n https://dist.wdlabs.com/Test-Spelling-0.20.tar.gz
 RUN cpanm -n https://dist.wdlabs.com/Test2-Tools-PerlCritic-0.01.tar.gz
 
 RUN perl -npE 's/use warnings;/no warnings;/' /opt/dzil/lib/perl5/Pod/Spell.pm > /opt/dzil/lib/perl5/Pod/Spell.pm.nowarn
 RUN mv /opt/dzil/lib/perl5/Pod/Spell.pm.nowarn /opt/dzil/lib/perl5/Pod/Spell.pm
-
-RUN cpanm -n https://cpan.metacpan.org/authors/id/P/PL/PLICEASE/Dist-Zilla-Plugin-Author-Plicease-2.38.tar.gz
-RUN cpanm -n https://cpan.metacpan.org/authors/id/P/PL/PLICEASE/Dist-Zilla-PluginBundle-Author-Plicease-2.38.tar.gz
