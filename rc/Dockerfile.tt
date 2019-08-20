@@ -1,6 +1,13 @@
 FROM plicease/ciperl-base:[% dist_release %]
 LABEL maintainer="Graham Ollis <plicease@cpan.org>"
 
+[% IF packages.debian %]
+RUN apt-get update                                     \
+ && apt-get install [% packages.debian %]              \
+ && apt-get -q  clean                                  \
+ && rm -rf /var/lib/apt/lists/*
+[% END %]
+
 [% IF old %]
 RUN curl https://raw.githubusercontent.com/tokuhirom/Perl-Build/master/perl-build | perl - [% old %] /opt/perl/[% old %]/
 RUN curl https://cpanmin.us | /opt/perl/[% old %]/bin/perl - App::cpanminus && rm -rf ~/.cpanm
