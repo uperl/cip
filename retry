@@ -1,0 +1,22 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+use feature qw( say );
+use autodie qw( :system );
+
+for(1..10)
+{
+  say "[$_] % @ARGV";
+  eval { system @ARGV };
+  if($@)
+  {
+    next
+  }
+  else
+  {
+    exit 0;
+  }
+}
+
+die $@;
