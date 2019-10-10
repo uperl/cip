@@ -13,10 +13,10 @@ while [ "x$1" != "x" ]; do
 
   if [ -f "versions/$tag/Dockerfile" ]; then
     docker build -f versions/$tag/Dockerfile -t plicease/ciperl:"$tag" .
-    docker push plicease/ciperl:"$tag"
+    ./retry docker push plicease/ciperl:"$tag"
   elif [ -f "base/versions/$tag/Dockerfile" ]; then
     docker build -f base/versions/$tag/Dockerfile -t plicease/ciperl-base:"$tag" .
-    docker push plicease/ciperl-base:"$tag"
+    ./retry docker push plicease/ciperl-base:"$tag"
   else
     echo "no such tag: $tag"
     exit 2
