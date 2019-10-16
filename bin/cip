@@ -424,6 +424,15 @@ case "$command" in
           '
           ;;
 
+        golang)
+          cip sudo bash -c '
+            set -ex
+            curl https://dl.google.com/go/go1.13.1.src.tar.gz -sSf | tar -C /usr/local -zxvf -
+            cd /usr/local/bin
+            ln -s ../go/bin/* .
+          '
+          ;;
+
         *)
           cip sudo bash -c "
             set -ex
