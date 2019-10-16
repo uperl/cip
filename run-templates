@@ -254,6 +254,7 @@ foreach my $perl_version ($latest_stable)
       packages => {
         debian => 'valgrind',
       },
+      ffimaster    => 1,
     );
   }
 }

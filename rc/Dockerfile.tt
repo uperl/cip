@@ -82,7 +82,7 @@ RUN apt-get update                                                              
  && cd libffi-master                                                                  \
  && ./autogen.sh                                                                      \
  && ./configure --prefix=/opt/libffi --disable-shared && make && make install         \
- && cd .. && rm -rf libffi-master                                                     \
+ && cd ..                                                                             \
  && apt-get -q purge autoconf automake libtool texinfo                                \
  && apt-get -q autoremove                                                             \
  && apt-get -q clean
