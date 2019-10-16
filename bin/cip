@@ -66,6 +66,9 @@ subcommands:
   cip scn clean
     - remove all scn images
 
+  cip pkg [ package ]
+    - install package
+
 environment:
 
   CIP_TAG  the docker tag for plicease/ciperl defaults to 'default'
@@ -399,6 +402,40 @@ case "$command" in
         docker container rm /$name
       fi
     done
+    ;;
+
+  pkg)
+    if [ "x$1" == "x" ]; then
+      echo "usage: cip pkg [package-name]";
+    else
+      pkg=$1
+      shift
+      case "$pkg" in
+
+        rust)
+          cip bash -c '
+            set -ex
+            export TMPDIR=/home/cip/tmp
+            mkdir -p $TMPDIR
+            curl https://sh.rustup.rs -sSf > $TMPDIR/rustup-init.sh
+            chmod +x $TMPDIR/rustup-init.sh
+            $TMPDIR/rustup-init.sh --no-modify-path -y
+            rm -f $TMPDIR/rustup-init.sh
+          '
+          ;;
+
+        *)
+          cip sudo bash -c "
+            set -ex
+            cd /
+            curl https://dist.wdlabs.com/$pkg.tar.gz -sSf | tar zxvf -
+            chmod -R go+r+X /usr/local
+            ldconfig
+          "
+          ;;
+
+      esac
+    fi
     ;;
 
   *)
