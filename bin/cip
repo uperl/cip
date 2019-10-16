@@ -94,6 +94,10 @@ function cip_local_lib {
   export CIP_LOCAL_LIB="-e PATH=/home/cip/perl5/bin:$container_path -e PERL5LIB=/home/cip/perl5/lib/perl5 -e PERL_MM_OPT=INSTALL_BASE=/home/cip/perl5"
 }
 
+function env2docker {
+  export CIP_ENV_DOCKER=$(perl -e 'use strict; print join " ", map { my($n,$v) = split /=/, $_, 2; "-e $n=$v" } @ARGV' $CIP_ENV)
+}
+
 function dist_dir_name {
   export CIP_DIST_DIR=$(grep ^name dist.ini | head -1 | cut -d= -f2 | sed 's/^[ ]*//' | sed 's/[ ]*$//')-$(grep ^version dist.ini | head -1 | cut -d= -f2 | sed 's/^[ ]*//' | sed 's/[ ]*$//')
 }
@@ -358,26 +362,26 @@ case "$command" in
     ;;
 
   sudo)
-    docker exec $CIP_CONT "$@"
+    env2docker
+    docker exec $CIP_ENV_DOCKER $CIP_CONT "$@"
     ;;
 
   exec)
     cip_local_lib
-    docker exec $CIP_LOCAL_LIB -e PERL_MB_OPT="--install_base /home/cip/perl5" -u 1000 $CIP_CONT "$@"
+    env2docker
+    docker exec $CIP_LOCAL_LIB -e PERL_MB_OPT="--install_base /home/cip/perl5" $CIP_ENV_DOCKER -u 1000 $CIP_CONT "$@"
     ;;
 
   exec-background)
     cip_local_lib
-    docker exec -d $CIP_LOCAL_LIB -e PERL_MB_OPT="--install_base /home/cip/perl5" -u 1000 $CIP_CONT "$@"
+    env2docker
+    docker exec -d $CIP_LOCAL_LIB -e PERL_MB_OPT="--install_base /home/cip/perl5" $CIP_ENV_DOCKER -u 1000 $CIP_CONT "$@"
     ;;
 
   bash|tcsh|perl|nano)
     cip_local_lib
-    if [ "x$CIP_ENV" == "x" ]; then
-      docker exec $CIP_LOCAL_LIB -e PERL_MB_OPT="--install_base /home/cip/perl5" -it -u 1000 $CIP_CONT $command "$@"
-    else
-      docker exec $CIP_LOCAL_LIB -e PERL_MB_OPT="--install_base /home/cip/perl5" -it -u 1000 $CIP_CONT env $CIP_ENV $command "$@"
-    fi
+    env2docker
+    docker exec $CIP_LOCAL_LIB -e PERL_MB_OPT="--install_base /home/cip/perl5" -it $CIP_ENV_DOCKER -u 1000 $CIP_CONT $command "$@"
     ;;
 
   stop)
