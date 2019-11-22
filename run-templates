@@ -9,24 +9,26 @@ use File::chdir;
 use Path::Tiny qw( path );
 
 my $tt = Template->new;
-my $stable        = 'stretch';
-my $latest_stable = '5.30.0';
-my $latest_dev    = '5.31.4';
+my $stable        = 'buster';
+my $latest_stable = '5.30.1';
+my $latest_dev    = '5.31.6';
 
 my %perl_sources = (
   '5.28.1' => 'https://cpan.metacpan.org/authors/id/S/SH/SHAY/perl-5.28.1.tar.gz',
   '5.28.2' => 'https://cpan.metacpan.org/authors/id/S/SH/SHAY/perl-5.28.2.tar.gz',
   '5.30.0' => 'https://cpan.metacpan.org/authors/id/X/XS/XSAWYERX/perl-5.30.0.tar.gz',
+  '5.30.1' => 'https://cpan.metacpan.org/authors/id/S/SH/SHAY/perl-5.30.1.tar.gz',
   '5.31.1' => 'https://cpan.metacpan.org/authors/id/E/ET/ETHER/perl-5.31.1.tar.gz',
   '5.31.2' => 'https://cpan.metacpan.org/authors/id/S/SH/SHAY/perl-5.31.2.tar.gz',
+  '5.31.6' => 'https://cpan.metacpan.org/authors/id/B/BI/BINGOS/perl-5.31.6.tar.gz',
 );
 
 # build the Dockerfiles for the base images
 {
   my %deb = (
-    'i386/debian' => [ qw( stretch32 buster32 ) ],
-    'debian'      => [ qw( jessie stretch buster ) ],
-    'ubuntu'      => [ qw( xenial bionic disco ) ],
+    'i386/debian' => [ qw( buster32 bullseye32 ) ],
+    'debian'      => [ qw( stretch buster bullseye ) ],
+    'ubuntu'      => [ qw( xenial bionic ) ],
   );
   my %extra = (
   );
@@ -118,7 +120,7 @@ sub generate_dockerfile
   close $fh;
 }
 
-foreach my $perl_version (qw( 5.30.0 5.28.2 5.26.3 5.24.4 5.22.4 5.20.3 5.18.4 5.16.3 5.14.4 ))
+foreach my $perl_version ($latest_stable, qw( 5.28.2 5.26.3 5.24.4 5.22.4 5.20.3 5.18.4 5.16.3 5.14.4 ))
 {
   my @aliases;
   push @aliases, $perl_version;
@@ -193,7 +195,7 @@ foreach my $flag (qw( threads longdouble quadmath ))
 foreach my $perl_version ($latest_stable)
 {
 
-  foreach my $dist_release (qw( bionic buster buster32 stretch32 jessie xenial disco centos7 fedora29  ))
+  foreach my $dist_release (qw( bionic buster bullseye stretch32 bullseye32 jessie xenial disco centos7 fedora29  ))
   {
     my $tag = "$perl_version-$dist_release";
     my @aliases;
@@ -262,7 +264,7 @@ foreach my $perl_version ($latest_stable)
 # default
 {
   unlink 'versions/default' if -l 'versions/default';
-  symlink "versions/$latest_stable", 'versions/default';
+  symlink "$latest_stable", 'versions/default';
 }
 
 # static
