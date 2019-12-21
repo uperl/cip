@@ -51,17 +51,19 @@ RUN bash -c 'cd /opt/perl/[% perl_version %]/bin; reln -s "s/[% perl_suffix %]$/
 [% END %]
 
 [% IF old %]
-ADD rc/dzil-old-cpanm /opt/perl/[% perl_version %]/bin/dzil-cpanm
-ADD rc/dzil-old-dzil  /opt/perl/[% perl_version %]/bin/dzil-dzil
-ADD rc/dzil-old-af    /opt/perl/[% perl_version %]/bin/dzil-af
+ADD rc/dzil-old-cpanm   /opt/perl/[% perl_version %]/bin/dzil-cpanm
+ADD rc/dzil-old-dzil    /opt/perl/[% perl_version %]/bin/dzil-dzil
+ADD rc/dzil-old-af      /opt/perl/[% perl_version %]/bin/dzil-af
+ADD rc/dzil-old-wrapper /opt/perl/[% perl_version %]/bin/dzil-wrapper
 [% ELSE %]
 RUN cpanm -n -L /opt/dzil Dist::Zilla && rm -rf ~/.cpanm
 RUN cpanm -n -L /opt/dzil Dist::Zilla::PluginBundle::Author::Plicease && rm -rf ~/.cpanm
 RUN cpanm -n -L /opt/dzil App::af && rm -rf ~/.cpanm
 
-ADD rc/dzil-cpanm /opt/perl/[% perl_version %]/bin
-ADD rc/dzil-dzil  /opt/perl/[% perl_version %]/bin
-ADD rc/dzil-af    /opt/perl/[% perl_version %]/bin
+ADD rc/dzil-cpanm   /opt/perl/[% perl_version %]/bin
+ADD rc/dzil-dzil    /opt/perl/[% perl_version %]/bin
+ADD rc/dzil-af      /opt/perl/[% perl_version %]/bin
+ADD rc/dzil-wrapper /opt/perl/[% perl_version %]/bin
 [% END %]
 
 RUN chmod +x /opt/perl/[% perl_version %]/bin/dzil-*

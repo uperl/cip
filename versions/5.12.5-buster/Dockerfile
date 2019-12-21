@@ -13,9 +13,10 @@ RUN curl https://cpanmin.us | /opt/perl/5.12.5/bin/perl - App::cpanminus && rm -
 
 ENV PATH /opt/perl/5.12.5/bin:/home/cip/bin:/home/cip/.cargo/bin:/usr/local/go/bin:$PATH
 
-ADD rc/dzil-old-cpanm /opt/perl/5.12.5/bin/dzil-cpanm
-ADD rc/dzil-old-dzil  /opt/perl/5.12.5/bin/dzil-dzil
-ADD rc/dzil-old-af    /opt/perl/5.12.5/bin/dzil-af
+ADD rc/dzil-old-cpanm   /opt/perl/5.12.5/bin/dzil-cpanm
+ADD rc/dzil-old-dzil    /opt/perl/5.12.5/bin/dzil-dzil
+ADD rc/dzil-old-af      /opt/perl/5.12.5/bin/dzil-af
+ADD rc/dzil-old-wrapper /opt/perl/5.12.5/bin/dzil-wrapper
 
 RUN chmod +x /opt/perl/5.12.5/bin/dzil-*
 
