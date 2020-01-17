@@ -45,5 +45,7 @@ RUN cpanm -n Dist::Zilla::Plugin::MetaProvides::Package        && rm -rf ~/.cpan
 RUN cpanm -n https://dist.wdlabs.com/Test-Spelling-0.20.tar.gz
 RUN cpanm -n https://dist.wdlabs.com/Test2-Tools-PerlCritic-0.01.tar.gz
 
-RUN perl -npE 's/use warnings;/no warnings;/' /opt/dzil/lib/perl5/Pod/Spell.pm > /opt/dzil/lib/perl5/Pod/Spell.pm.nowarn
-RUN mv /opt/dzil/lib/perl5/Pod/Spell.pm.nowarn /opt/dzil/lib/perl5/Pod/Spell.pm
+# don't include Test::Strict, because it requires XS modules to be built
+#RUN cpanm -n Test::Strict
+
+RUN perl -npE 's/use warnings;/no warnings;/' /opt/dzil/lib/perl5/Pod/Spell.pm > /opt/dzil/lib/perl5/Pod/Spell.pm.nowarn && mv /opt/dzil/lib/perl5/Pod/Spell.pm.nowarn /opt/dzil/lib/perl5/Pod/Spell.pm
