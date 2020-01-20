@@ -41,6 +41,7 @@ RUN cpanm -n Dist::Zilla::Plugin::DynamicPrereqs               && rm -rf ~/.cpan
 RUN cpanm -n Test::Pod::Spelling::CommonMistakes               && rm -rf ~/.cpanm
 RUN cpanm -n Dist::Zilla::PluginBundle::Author::Plicease       && rm -rf ~/.cpanm
 RUN cpanm -n Dist::Zilla::Plugin::MetaProvides::Package        && rm -rf ~/.cpanm
+RUN cpanm -n Dist::Zilla::Plugin::Bootstrap::lib               && rm -rf ~/.cpanm
 
 RUN cpanm -n https://dist.wdlabs.com/Test-Spelling-0.20.tar.gz
 RUN cpanm -n https://dist.wdlabs.com/Test2-Tools-PerlCritic-0.01.tar.gz
