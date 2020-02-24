@@ -22,6 +22,7 @@ RUN  echo 'APT::Get::Assume-Yes "true";' >> /etc/apt/apt.conf.d/00cip  \
        xz-utils \
        zlib1g-dev \
        pkg-config \
+       file \
   && apt-get -q autoremove \
   && apt-get -q clean \
   && rm -rf /var/lib/apt/lists/*
