@@ -13,7 +13,8 @@ RUN apk add --no-cache \
   openssl-dev \
   curl \
   musl-dev \
-  zlib-dev
+  zlib-dev \
+  file
 
 RUN mkdir /work
 

@@ -13,6 +13,7 @@ RUN yum install -y \
      openssl \
      openssl-devel \
      zlib-devel \
+     file \
   && yum clean all
 
 RUN mkdir /work
