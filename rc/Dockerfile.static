@@ -48,6 +48,7 @@ RUN cpanm -n Env::ShellWords                                   && rm -rf ~/.cpan
 RUN cpanm -n Dist::Zilla::Plugin::SetScriptShebang             && rm -rf ~/.cpanm
 RUN cpanm -n Dist::Zilla::Plugin::CommentOut                   && rm -rf ~/.cpanm
 RUN cpanm -n Alien::Build::Plugin::Build::Copy                 && rm -rf ~/.cpanm
+RUN cpanm -n Dist::Zilla::Plugin::MathInt64                    && rm -rf ~/.cpanm
 
 RUN cpanm -n https://dist.wdlabs.com/Test-Spelling-0.20.tar.gz
 RUN cpanm -n https://dist.wdlabs.com/Test2-Tools-PerlCritic-0.01.tar.gz
