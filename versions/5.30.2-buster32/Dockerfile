@@ -1,4 +1,4 @@
-FROM plicease/ciperl-base:stretch32
+FROM plicease/ciperl-base:buster32
 LABEL maintainer="Graham Ollis <plicease@cpan.org>"
 
 RUN curl https://raw.githubusercontent.com/tokuhirom/Perl-Build/master/perl-build | perl - 5.30.2 /opt/perl/5.30.2/
@@ -21,4 +21,4 @@ RUN chmod +x /opt/perl/5.30.2/bin/dzil-*
 ENV CI true
 ENV CIPSOMETHING true
 ENV CONTINUOUS_INTEGRATION true
-ENV CIPDIST stretch32
+ENV CIPDIST buster32
