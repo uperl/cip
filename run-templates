@@ -31,9 +31,10 @@ my %perl_sources = (
 # build the Dockerfiles for the base images
 {
   my %deb = (
-    'i386/debian' => [ qw( buster32 bullseye32 ) ],
-    'debian'      => [ qw( stretch buster bullseye ) ],
-    'ubuntu'      => [ qw( xenial bionic ) ],
+    'i386/debian'    => [ qw( buster32 bullseye32 ) ],
+    'arm64v8/debian' => [ qw( buster-arm64v8 ) ],
+    'debian'         => [ qw( stretch buster bullseye ) ],
+    'ubuntu'         => [ qw( xenial bionic ) ],
   );
   my %extra = (
   );
@@ -47,7 +48,7 @@ my %perl_sources = (
       $path = $path->child('Dockerfile');
       $tt->process(
         "rc/Dockerfile-base.tt",
-        { dist => $dist, dist_release => $dist_release =~ s/32$//r, %{ $extra{$dist_release} // {} } },
+        { dist => $dist, dist_release => $dist_release =~ s/(32|-arm64v8)$//r, %{ $extra{$dist_release} // {} } },
         "$path"
       ) || die $tt->error
     }
