@@ -6,6 +6,12 @@ if [ "x$CIP_TAG" == "x" ]; then
   export CIP_TAG=default
 fi
 
+if test -t 1; then
+  export CIP_USE_TTY=-it
+else
+  export CIP_USE_TTY=
+fi
+
 function usage {
   cat <<EOF
 usage: $0 [subcommand]
@@ -172,7 +178,7 @@ case "$command" in
       -v ~/.cip/dzil-cache/"$CIP_TAG":/home/cip/dzil \
       --rm \
       --tmpfs /tmp \
-      -it \
+      $CIP_USE_TTY \
       plicease/ciperl:$CIP_TAG
   ;;
 
@@ -185,7 +191,7 @@ case "$command" in
       -v ~/.cip/dzil-cache/"$CIP_TAG":/home/cip/dzil \
       --tmpfs /tmp \
       --rm \
-      -it \
+      $CIP_USE_TTY \
       plicease/ciperl:$CIP_TAG \
       dzil run --no-build prove -lr xt
   ;;
@@ -232,6 +238,7 @@ case "$command" in
     else
       cip exec perl -V
     fi
+    echo "CIP_USE_TTY=$CIP_USE_TTY"
     ;;
 
   install)
@@ -385,7 +392,7 @@ case "$command" in
   bash|tcsh|perl|nano)
     cip_local_lib
     env2docker
-    docker exec $CIP_LOCAL_LIB -e PERL_MB_OPT="--install_base /home/cip/perl5" -it $CIP_ENV_DOCKER -u 1000 $CIP_CONT $command "$@"
+    docker exec $CIP_LOCAL_LIB -e PERL_MB_OPT="--install_base /home/cip/perl5" $CIP_USE_TTY $CIP_ENV_DOCKER -u 1000 $CIP_CONT $command "$@"
     ;;
 
   stop)
