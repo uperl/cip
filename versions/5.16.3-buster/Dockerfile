@@ -10,6 +10,7 @@ ENV PATH /opt/perl/5.16.3/bin:/home/cip/bin:/home/cip/.cargo/bin:/usr/local/go/b
 RUN cpanm -n -L /opt/dzil Dist::Zilla && rm -rf ~/.cpanm
 RUN cpanm -n -L /opt/dzil Dist::Zilla::PluginBundle::Author::Plicease && rm -rf ~/.cpanm
 RUN cpanm -n -L /opt/dzil App::af && rm -rf ~/.cpanm
+RUN cpanm -n ExtUtils::MakeMaker && rm -rf ~/.cpanm
 
 ADD rc/dzil-cpanm   /opt/perl/5.16.3/bin
 ADD rc/dzil-dzil    /opt/perl/5.16.3/bin
