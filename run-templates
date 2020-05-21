@@ -30,6 +30,7 @@ my %perl_sources = (
 
 # build the Dockerfiles for the base images
 {
+  my $arch = 'x86_64';
   my %deb = (
     'i386/debian'    => [ qw( buster32 bullseye32 ) ],
     'arm64v8/debian' => [ qw( buster-arm64v8 ) ],
@@ -41,9 +42,10 @@ my %perl_sources = (
 
   foreach my $dist (sort keys %deb)
   {
+    my $arch = $dist =~ /^arm64v8\// ? 'aarch64' : 'x86_64';
     foreach my $dist_release (sort $deb{$dist}->@*)
     {
-      my $path = path('base/versions')->child($dist_release);
+      my $path = path("base/$arch")->child($dist_release);
       $path->mkpath;
       $path = $path->child('Dockerfile');
       $tt->process(
@@ -64,7 +66,7 @@ my %perl_sources = (
     foreach my $dist_version (sort $fedora{$dist}->@*)
     {
       my $dist_release = "$dist$dist_version";
-      my $path = path('base/versions')->child($dist_release);
+      my $path = path("base/$arch")->child($dist_release);
       $path->mkpath;
       $path = $path->child('Dockerfile');
       $tt->process(
@@ -83,7 +85,7 @@ my %perl_sources = (
     foreach my $dist_version (sort $alpine{$dist}->@*)
     {
       my $dist_release = "$dist$dist_version";
-      my $path = path('base/versions')->child($dist_release);
+      my $path = path("base/$arch")->child($dist_release);
       $path->mkpath;
       $path = $path->child('Dockerfile');
       $tt->process(
