@@ -100,11 +100,12 @@ my %perl_sources = (
 sub generate_dockerfile
 {
   my($tag, $aliases, %vars) = @_;
-  my $path = path('versions')->child($tag);
+  my $arch = $vars{dist_release} =~ /-arm64v8/ ? 'aarch64' : 'x86_64';
+  my $path = path("versions/$arch")->child($tag);
   $path->mkpath;
   foreach my $alias ($aliases->@*)
   {
-    my $alias_path = path('versions')->child($alias);
+    my $alias_path = path("versions/$arch")->child($alias);
     if(-e $alias_path)
     {
       if(! -l $alias_path)
@@ -288,14 +289,14 @@ foreach my $perl_version ($latest_stable)
 
 # default
 {
-  unlink 'versions/default' if -l 'versions/default';
-  symlink "$latest_stable", 'versions/default';
+  unlink 'versions/x86_64/default' if -l 'versions/x86_64/default';
+  symlink "$latest_stable", 'versions/x86_64/default';
 }
 
 # static
 {
-  mkdir 'versions/static' unless -d 'versions/static';
-  path('versions/static/Dockerfile')->spew(
+  mkdir 'versions/x86_64/static' unless -d 'versions/x86_64/static';
+  path('versions/x86_64/static/Dockerfile')->spew(
     path('rc/Dockerfile.static')->slurp
   );
 }
