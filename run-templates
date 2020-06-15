@@ -11,8 +11,8 @@ use Path::Tiny qw( path );
 
 my $tt = Template->new;
 my $stable        = 'buster';
-my $latest_stable = '5.32.0';
-my $latest_dev    = '5.31.11';
+my $latest_stable = '5.30.3';
+my $latest_dev    = '5.32.0-RC1';
 
 my %perl_sources = (
   '5.28.1'  => 'https://cpan.metacpan.org/authors/id/S/SH/SHAY/perl-5.28.1.tar.gz',
@@ -29,7 +29,6 @@ my %perl_sources = (
   '5.31.9'  => 'https://cpan.metacpan.org/authors/id/R/RE/RENEEB/perl-5.31.9.tar.gz',
   '5.31.10' => 'https://cpan.metacpan.org/authors/id/X/XS/XSAWYERX/perl-5.31.10.tar.gz',
   '5.31.11' => 'https://cpan.metacpan.org/authors/id/X/XS/XSAWYERX/perl-5.31.11.tar.gz',
-  '5.32.0'  => 'https://cpan.metacpan.org/authors/id/X/XS/XSAWYERX/perl-5.32.0-RC1.tar.gz',
 );
 
 # build the Dockerfiles for the base images
