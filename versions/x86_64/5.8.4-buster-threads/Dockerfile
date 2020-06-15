@@ -7,18 +7,18 @@ RUN /opt/perl/5.24.4/bin/cpanm -n -L /opt/dzil Dist::Zilla && rm -rf ~/.cpanm
 RUN /opt/perl/5.24.4/bin/cpanm -n -L /opt/dzil Dist::Zilla::PluginBundle::Author::Plicease && rm -rf ~/.cpanm
 RUN /opt/perl/5.24.4/bin/cpanm -n -L /opt/dzil App::af && rm -rf ~/.cpanm
 
-RUN curl https://raw.githubusercontent.com/tokuhirom/Perl-Build/master/perl-build | perl - 5.8.2 /opt/perl/5.8.2/
+RUN curl https://raw.githubusercontent.com/tokuhirom/Perl-Build/master/perl-build | perl - 5.8.4 /opt/perl/5.8.4/ -Dusethreads
 
-RUN curl https://cpanmin.us | /opt/perl/5.8.2/bin/perl - App::cpanminus && rm -rf ~/.cpanm
+RUN curl https://cpanmin.us | /opt/perl/5.8.4/bin/perl - App::cpanminus && rm -rf ~/.cpanm
 
-ENV PATH /opt/perl/5.8.2/bin:/home/cip/bin:/home/cip/.cargo/bin:/usr/local/go/bin:$PATH
+ENV PATH /opt/perl/5.8.4/bin:/home/cip/bin:/home/cip/.cargo/bin:/usr/local/go/bin:$PATH
 
-ADD rc/dzil-old-cpanm   /opt/perl/5.8.2/bin/dzil-cpanm
-ADD rc/dzil-old-dzil    /opt/perl/5.8.2/bin/dzil-dzil
-ADD rc/dzil-old-af      /opt/perl/5.8.2/bin/dzil-af
-ADD rc/dzil-old-wrapper /opt/perl/5.8.2/bin/dzil-wrapper
+ADD rc/dzil-old-cpanm   /opt/perl/5.8.4/bin/dzil-cpanm
+ADD rc/dzil-old-dzil    /opt/perl/5.8.4/bin/dzil-dzil
+ADD rc/dzil-old-af      /opt/perl/5.8.4/bin/dzil-af
+ADD rc/dzil-old-wrapper /opt/perl/5.8.4/bin/dzil-wrapper
 
-RUN chmod +x /opt/perl/5.8.2/bin/dzil-*
+RUN chmod +x /opt/perl/5.8.4/bin/dzil-*
 
 ENV CI true
 ENV CIPSOMETHING true

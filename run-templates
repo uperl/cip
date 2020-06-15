@@ -183,7 +183,7 @@ foreach my $perl_version ($latest_dev)
   );
 }
 
-foreach my $perl_version (qw( 5.12.5 5.10.1 5.10.0 5.8.9 5.8.8 5.8.7 5.8.6 5.8.5 5.8.4 5.8.3 5.8.2 5.8.1 ))
+foreach my $perl_version (qw( 5.12.5 5.10.1 5.10.0 5.8.9 5.8.8 5.8.7 5.8.6 5.8.5 5.8.4 ))
 {
   my @aliases;
   push @aliases, $perl_version;
@@ -201,7 +201,7 @@ foreach my $perl_version (qw( 5.12.5 5.10.1 5.10.0 5.8.9 5.8.8 5.8.7 5.8.6 5.8.5
 
 foreach my $flag (qw( threads longdouble quadmath ))
 {
-  foreach my $perl_version ('5.8.1', '5.8.8', '5.10.0', '5.10.1', '5.14.4', $latest_stable)
+  foreach my $perl_version ('5.8.4', '5.8.8', '5.10.0', '5.10.1', '5.14.4', $latest_stable)
   {
     next if $flag ne 'threads' && $perl_version =~ /^(5\.8|5\.10)\./;
     next if $flag eq 'quadmath' && $perl_version eq '5.14.4';
