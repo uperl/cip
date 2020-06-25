@@ -11,8 +11,8 @@ use Path::Tiny qw( path );
 
 my $tt = Template->new;
 my $stable        = 'buster';
-my $latest_stable = '5.30.3';
-my $latest_dev    = '5.32.0-RC1';
+my $latest_stable = '5.32.0';
+my $latest_dev    = '5.31.11';
 
 my %perl_sources = (
   '5.28.1'  => 'https://cpan.metacpan.org/authors/id/S/SH/SHAY/perl-5.28.1.tar.gz',
@@ -113,7 +113,8 @@ sub generate_dockerfile
     {
       if(! -l $alias_path)
       {
-        die "alias path $alias_path is not a symlink!";
+        use Carp qw( croak );
+        croak "alias path $alias_path is not a symlink!";
       }
       unlink $alias_path;
     }
