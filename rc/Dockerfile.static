@@ -24,36 +24,36 @@ RUN echo en_US.UTF-8 UTF-8 >> /etc/locale.gen
 RUN locale-gen
 RUN dpkg-reconfigure locales
 
-RUN cpanm -n Perl::Critic                                      && rm -rf ~/.cpanm
-RUN cpanm -n Perl::Critic::Freenode                            && rm -rf ~/.cpanm
-RUN cpanm -n YAML                                              && rm -rf ~/.cpanm
-RUN cpanm -n Test::EOL                                         && rm -rf ~/.cpanm
-RUN cpanm -n Test::NoTabs                                      && rm -rf ~/.cpanm
-RUN cpanm -n Test::Pod                                         && rm -rf ~/.cpanm
-RUN cpanm -n Test::Spelling                                    && rm -rf ~/.cpanm
-RUN cpanm -n Test::Version                                     && rm -rf ~/.cpanm
-RUN cpanm -n Test::CPAN::Changes                               && rm -rf ~/.cpanm
-RUN cpanm -n Test::Fixme                                       && rm -rf ~/.cpanm
-RUN cpanm -n Dist::Zilla::Plugin::PPPort                       && rm -rf ~/.cpanm
-RUN cpanm -n Dist::Zilla::Plugin::AlienBase::Wrapper::Bundle   && rm -rf ~/.cpanm
-RUN cpanm -n Dist::Zilla::Plugin::Meta::Dynamic::Config        && rm -rf ~/.cpanm
-RUN cpanm -n Dist::Zilla::Plugin::DynamicPrereqs               && rm -rf ~/.cpanm
-RUN cpanm -n Test::Pod::Spelling::CommonMistakes               && rm -rf ~/.cpanm
-RUN cpanm -n Dist::Zilla::PluginBundle::Author::Plicease       && rm -rf ~/.cpanm
-RUN cpanm -n Dist::Zilla::Plugin::MetaProvides::Package        && rm -rf ~/.cpanm
-RUN cpanm -n Dist::Zilla::Plugin::Bootstrap::lib               && rm -rf ~/.cpanm
-RUN cpanm -n Alien::Build::Plugin::Decode::SourceForge         && rm -rf ~/.cpanm
-RUN cpanm -n Alien::Build::Plugin::Probe::GnuWin32             && rm -rf ~/.cpanm
-RUN cpanm -n Env::ShellWords                                   && rm -rf ~/.cpanm
-RUN cpanm -n Dist::Zilla::Plugin::SetScriptShebang             && rm -rf ~/.cpanm
-RUN cpanm -n Dist::Zilla::Plugin::CommentOut                   && rm -rf ~/.cpanm
-RUN cpanm -n Alien::Build::Plugin::Build::Copy                 && rm -rf ~/.cpanm
-RUN cpanm -n Dist::Zilla::Plugin::MathInt64                    && rm -rf ~/.cpanm
-RUN cpanm -n Dist::Zilla::Plugin::FFI::Build                   && rm -rf ~/.cpanm
-RUN cpanm -n Dist::Zilla::Plugin::Deprecated                   && rm -rf ~/.cpanm
-RUN cpanm -n Test2::Tools::PerlCritic                          && rm -rf ~/.cpanm
-
-RUN cpanm -n https://dist.wdlabs.com/Test-Spelling-0.20.tar.gz
+RUN cpanm -n Perl::Critic                                      \
+             Perl::Critic::Freenode                            \
+             YAML                                              \
+             Test::EOL                                         \
+             Test::NoTabs                                      \
+             Test::Pod                                         \
+             Test::Spelling                                    \
+             Test::Version                                     \
+             Test::CPAN::Changes                               \
+             Test::Fixme                                       \
+             Dist::Zilla::Plugin::PPPort                       \
+             Dist::Zilla::Plugin::AlienBase::Wrapper::Bundle   \
+             Dist::Zilla::Plugin::Meta::Dynamic::Config        \
+             Dist::Zilla::Plugin::DynamicPrereqs               \
+             Test::Pod::Spelling::CommonMistakes               \
+             Dist::Zilla::PluginBundle::Author::Plicease       \
+             Dist::Zilla::Plugin::MetaProvides::Package        \
+             Dist::Zilla::Plugin::Bootstrap::lib               \
+             Alien::Build::Plugin::Decode::SourceForge         \
+             Alien::Build::Plugin::Probe::GnuWin32             \
+             Env::ShellWords                                   \
+             Dist::Zilla::Plugin::SetScriptShebang             \
+             Dist::Zilla::Plugin::CommentOut                   \
+             Alien::Build::Plugin::Build::Copy                 \
+             Dist::Zilla::Plugin::MathInt64                    \
+             Dist::Zilla::Plugin::FFI::Build                   \
+             Dist::Zilla::Plugin::Deprecated                   \
+             Test2::Tools::PerlCritic                          \
+             ExtUtils::CppGuess                                \
+             https://dist.wdlabs.com/Test-Spelling-0.20.tar.gz && rm -rf ~/.cpanm
 
 # don't include Test::Strict, because it requires XS modules to be built
 #RUN cpanm -n Test::Strict
