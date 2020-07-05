@@ -1,4 +1,4 @@
-FROM plicease/ciperl-base:centos6
+FROM plicease/ciperl-base:centos8
 LABEL maintainer="Graham Ollis <plicease@cpan.org>"
 
 RUN  mkdir /tmp/perl-build \
@@ -30,4 +30,4 @@ RUN chmod +x /opt/perl/5.32.0/bin/dzil-*
 ENV CI true
 ENV CIPSOMETHING true
 ENV CONTINUOUS_INTEGRATION true
-ENV CIPDIST centos6
+ENV CIPDIST centos8

@@ -1,4 +1,4 @@
-FROM centos:6
+FROM centos:8
 LABEL maintainer="Graham Ollis <plicease@cpan.org>"
 
 # Note: system perl is not installed by default
