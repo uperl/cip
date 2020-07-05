@@ -3,7 +3,7 @@ LABEL maintainer="Graham Ollis <plicease@cpan.org>"
 
 RUN  mkdir /tmp/perl-build \
   && cd /tmp/perl-build \
-  && curl -O  \
+  && curl -O https://cpan.metacpan.org/authors/id/X/XS/XSAWYERX/perl-5.32.0.tar.gz \
   && tar xvf perl-5.32.0.tar.gz \
   && cd perl-5.32.0 \
   && ./Configure -des -Dprefix=/opt/perl/5.32.0 \

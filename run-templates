@@ -29,6 +29,7 @@ my %perl_sources = (
   '5.31.9'  => 'https://cpan.metacpan.org/authors/id/R/RE/RENEEB/perl-5.31.9.tar.gz',
   '5.31.10' => 'https://cpan.metacpan.org/authors/id/X/XS/XSAWYERX/perl-5.31.10.tar.gz',
   '5.31.11' => 'https://cpan.metacpan.org/authors/id/X/XS/XSAWYERX/perl-5.31.11.tar.gz',
+  '5.32.0'  => 'https://cpan.metacpan.org/authors/id/X/XS/XSAWYERX/perl-5.32.0.tar.gz',
 );
 
 # build the Dockerfiles for the base images
