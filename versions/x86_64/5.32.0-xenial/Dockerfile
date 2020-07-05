@@ -1,7 +1,7 @@
 FROM plicease/ciperl-base:xenial
 LABEL maintainer="Graham Ollis <plicease@cpan.org>"
 
-RUN curl https://raw.githubusercontent.com/tokuhirom/Perl-Build/master/perl-build | perl - 5.32.0 /opt/perl/5.32.0/
+RUN curl https://raw.githubusercontent.com/tokuhirom/Perl-Build/master/perl-build | perl - https://cpan.metacpan.org/authors/id/X/XS/XSAWYERX/perl-5.32.0.tar.gz /opt/perl/5.32.0/
 
 RUN curl https://cpanmin.us | /opt/perl/5.32.0/bin/perl - App::cpanminus && rm -rf ~/.cpanm
 

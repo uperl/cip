@@ -31,11 +31,16 @@ RUN  mkdir /tmp/perl-build \
 
 [% ELSE %]
 
-RUN curl https://raw.githubusercontent.com/tokuhirom/Perl-Build/master/perl-build | perl - [% perl_version %] /opt/perl/[% perl_version %]/[% IF perl_flags %] [% perl_flags %][% END %]
+RUN curl https://raw.githubusercontent.com/tokuhirom/Perl-Build/master/perl-build | perl - [% IF perl_source %][% perl_source %][% ELSE %][% perl_version %][% END %] /opt/perl/[% perl_version %]/[% IF perl_flags %] [% perl_flags %][% END %]
 
 [% END %]
 
+[% IF core_p7 %]
+ADD rc/core-p7-cpanm /opt/perl/[% perl_version %]/bin/cpanm
+RUN chmod +x /opt/perl/[% perl_version %]/bin/cpanm
+[% ELSE %]
 RUN curl https://cpanmin.us | /opt/perl/[% perl_version %]/bin/perl[% IF perl_suffix %][% perl_suffix %][% END %] - App::cpanminus && rm -rf ~/.cpanm
+[% END %]
 
 [% IF perl_dev %]
 RUN /opt/perl/[% perl_version %]/bin/cpanm -n -L /opt/refileutils App::RegexFileUtils

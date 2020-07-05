@@ -30,6 +30,7 @@ my %perl_sources = (
   '5.31.10' => 'https://cpan.metacpan.org/authors/id/X/XS/XSAWYERX/perl-5.31.10.tar.gz',
   '5.31.11' => 'https://cpan.metacpan.org/authors/id/X/XS/XSAWYERX/perl-5.31.11.tar.gz',
   '5.32.0'  => 'https://cpan.metacpan.org/authors/id/X/XS/XSAWYERX/perl-5.32.0.tar.gz',
+  '7.0.0'   => 'https://github.com/Perl/perl5/archive/core-p7.tar.gz',
 );
 
 # build the Dockerfiles for the base images
@@ -163,25 +164,41 @@ foreach my $perl_version ($latest_stable, qw( 5.30.3 5.28.2 5.26.3 5.24.4 5.22.4
   );
 }
 
-foreach my $perl_version ($latest_dev)
+#foreach my $perl_version ($latest_dev)
+#{
+#  my @aliases;
+#  push @aliases, $perl_version;
+#  push @aliases, $perl_version =~ s/\.[0-9]+$//r;
+#  my $rc = 0;
+#  if($perl_version =~ /-RC[0-9]/)
+#  {
+#    $rc = 1;
+#    push @aliases, $perl_version =~ s/\.[0-9]+-RC[0-9]+$//r;
+#    push @aliases, $perl_version =~ s/-RC[0-9]+$//r . "-$stable";
+#    push @aliases, $perl_version =~ s/\.[0-9]+-RC[0-9]+$//r . "-$stable";
+#  }
+#  generate_dockerfile("$perl_version-$stable", \@aliases,
+#    dist_release => $stable,
+#    perl_dev     => 1,
+#    perl_suffix  => $perl_version =~ s/(-RC[0-9]+|)$//r,
+#    perl_flags   => '-Dusedevel',
+#    perl_version => $perl_version,
+#  );
+#}
+
+foreach my $perl_version ('7.0.0')
 {
-  my @aliases;
-  push @aliases, $perl_version;
-  push @aliases, $perl_version =~ s/\.[0-9]+$//r;
-  my $rc = 0;
-  if($perl_version =~ /-RC[0-9]/)
-  {
-    $rc = 1;
-    push @aliases, $perl_version =~ s/\.[0-9]+-RC[0-9]+$//r;
-    push @aliases, $perl_version =~ s/-RC[0-9]+$//r . "-$stable";
-    push @aliases, $perl_version =~ s/\.[0-9]+-RC[0-9]+$//r . "-$stable";
-  }
-  generate_dockerfile("$perl_version-$stable", \@aliases,
+  generate_dockerfile("$perl_version-core-p7", ['7.0-core-p7'],
     dist_release => $stable,
     perl_dev     => 1,
-    perl_suffix  => $perl_version =~ s/(-RC[0-9]+|)$//r,
     perl_flags   => '-Dusedevel',
     perl_version => $perl_version,
+    perl_suffix  => $perl_version =~ s/(-RC[0-9]+|)$//r,
+    old          => '5.24.4',
+    (
+      defined $perl_sources{$perl_version} ? (perl_source  => $perl_sources{$perl_version}) : ()
+    ),
+    core_p7 => 1,
   );
 }
 
