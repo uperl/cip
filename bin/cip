@@ -221,13 +221,12 @@ case "$command" in
         docker ps
       ;;
     esac
-    # commenting this out for now, cache needs to be cleared for .y bumps
-    ### TODO: this works around the fact that the minor version (the y in 5.x.y)
-    ### may have changed and we may have a cached local::lib.  It's possible that
-    ### there may be a breaking change between minor versions in a dev release
-    ### so it would be better to detect that change and clear the cache.
-    ##cip bash -c 'id'
-    ##cip bash -c 'curl https://cpanmin.us | perl - -n --reinstall App::cpanminus'
+    # TODO: this works around the fact that the minor version (the y in 5.x.y)
+    # may have changed and we may have a cached local::lib.  It's possible that
+    # there may be a breaking change between minor versions in a dev release
+    # so it would be better to detect that change and clear the cache.
+    cip bash -c 'id'
+    cip bash -c 'curl https://cpanmin.us | perl - -n --reinstall App::cpanminus'
     if [ -f maint/cip-before-install ]; then
       ./maint/cip-before-install
     fi
