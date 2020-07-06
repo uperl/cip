@@ -11,6 +11,7 @@ use Path::Tiny qw( path );
 
 my $tt = Template->new;
 my $stable        = 'buster';
+my $stable32      = 'buster32';
 my $latest_stable = '5.32.0';
 my $latest_dev    = '5.31.11';
 
@@ -299,6 +300,24 @@ foreach my $perl_version ($latest_stable)
     push @aliases, ($perl_version =~ s/\.[0-9]+$//r) . "-debug";
     generate_dockerfile($tag, \@aliases,
       dist_release => $stable,
+      perl_version => $perl_version,
+      perl_flags   => '-DDEBUGGING -Doptimize=-g3 -Accflags="-DDEBUG_LEAKING_SCALARS"',
+      packages => {
+        debian => 'valgrind',
+      },
+      ffimaster    => 1,
+    );
+  }
+
+  # memory debug32
+  {
+    my $tag = "$perl_version-$stable32-debug32";
+    my @aliases;
+    push @aliases, "$perl_version-debug32";
+    push @aliases, ($perl_version =~ s/\.[0-9]+$//r) . "-$stable32-debug32";
+    push @aliases, ($perl_version =~ s/\.[0-9]+$//r) . "-debug32";
+    generate_dockerfile($tag, \@aliases,
+      dist_release => $stable32,
       perl_version => $perl_version,
       perl_flags   => '-DDEBUGGING -Doptimize=-g3 -Accflags="-DDEBUG_LEAKING_SCALARS"',
       packages => {
