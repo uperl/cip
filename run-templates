@@ -13,7 +13,7 @@ my $tt = Template->new;
 my $stable        = 'buster';
 my $stable32      = 'buster32';
 my $latest_stable = '5.32.0';
-my $latest_dev    = '5.31.11';
+my $latest_dev    = '5.33.0';
 
 my %perl_sources = (
   '5.28.1'  => 'https://cpan.metacpan.org/authors/id/S/SH/SHAY/perl-5.28.1.tar.gz',
@@ -22,15 +22,8 @@ my %perl_sources = (
   '5.30.1'  => 'https://cpan.metacpan.org/authors/id/S/SH/SHAY/perl-5.30.1.tar.gz',
   '5.30.2'  => 'https://cpan.metacpan.org/authors/id/S/SH/SHAY/perl-5.30.2.tar.gz',
   '5.30.3'  => 'https://cpan.metacpan.org/authors/id/X/XS/XSAWYERX/perl-5.30.3.tar.gz',
-  '5.31.1'  => 'https://cpan.metacpan.org/authors/id/E/ET/ETHER/perl-5.31.1.tar.gz',
-  '5.31.2'  => 'https://cpan.metacpan.org/authors/id/S/SH/SHAY/perl-5.31.2.tar.gz',
-  '5.31.6'  => 'https://cpan.metacpan.org/authors/id/B/BI/BINGOS/perl-5.31.6.tar.gz',
-  '5.31.7'  => 'https://cpan.metacpan.org/authors/id/A/AT/ATOOMIC/perl-5.31.7.tar.gz',
-  '5.31.8'  => 'https://cpan.metacpan.org/authors/id/W/WO/WOLFSAGE/perl-5.31.8.tar.gz',
-  '5.31.9'  => 'https://cpan.metacpan.org/authors/id/R/RE/RENEEB/perl-5.31.9.tar.gz',
-  '5.31.10' => 'https://cpan.metacpan.org/authors/id/X/XS/XSAWYERX/perl-5.31.10.tar.gz',
-  '5.31.11' => 'https://cpan.metacpan.org/authors/id/X/XS/XSAWYERX/perl-5.31.11.tar.gz',
   '5.32.0'  => 'https://cpan.metacpan.org/authors/id/X/XS/XSAWYERX/perl-5.32.0.tar.gz',
+  '5.33.0'  => 'https://cpan.metacpan.org/authors/id/X/XS/XSAWYERX/perl-5.33.0.tar.gz',
   '7.0.0'   => 'https://github.com/Perl/perl5/archive/core-p7.tar.gz',
 );
 
@@ -165,43 +158,43 @@ foreach my $perl_version ($latest_stable, qw( 5.30.3 5.28.2 5.26.3 5.24.4 5.22.4
   );
 }
 
-#foreach my $perl_version ($latest_dev)
-#{
-#  my @aliases;
-#  push @aliases, $perl_version;
-#  push @aliases, $perl_version =~ s/\.[0-9]+$//r;
-#  my $rc = 0;
-#  if($perl_version =~ /-RC[0-9]/)
-#  {
-#    $rc = 1;
-#    push @aliases, $perl_version =~ s/\.[0-9]+-RC[0-9]+$//r;
-#    push @aliases, $perl_version =~ s/-RC[0-9]+$//r . "-$stable";
-#    push @aliases, $perl_version =~ s/\.[0-9]+-RC[0-9]+$//r . "-$stable";
-#  }
-#  generate_dockerfile("$perl_version-$stable", \@aliases,
-#    dist_release => $stable,
-#    perl_dev     => 1,
-#    perl_suffix  => $perl_version =~ s/(-RC[0-9]+|)$//r,
-#    perl_flags   => '-Dusedevel',
-#    perl_version => $perl_version,
-#  );
-#}
-
-foreach my $perl_version ('7.0.0')
+foreach my $perl_version ($latest_dev)
 {
-  generate_dockerfile("$perl_version-core-p7", ['7.0-core-p7'],
+  my @aliases;
+  push @aliases, $perl_version;
+  push @aliases, $perl_version =~ s/\.[0-9]+$//r;
+  my $rc = 0;
+  if($perl_version =~ /-RC[0-9]/)
+  {
+    $rc = 1;
+    push @aliases, $perl_version =~ s/\.[0-9]+-RC[0-9]+$//r;
+    push @aliases, $perl_version =~ s/-RC[0-9]+$//r . "-$stable";
+    push @aliases, $perl_version =~ s/\.[0-9]+-RC[0-9]+$//r . "-$stable";
+  }
+  generate_dockerfile("$perl_version-$stable", \@aliases,
     dist_release => $stable,
     perl_dev     => 1,
+    perl_suffix  => $perl_version =~ s/(-RC[0-9]+|)$//r,
     perl_flags   => '-Dusedevel',
     perl_version => $perl_version,
-    perl_suffix  => $perl_version =~ s/(-RC[0-9]+|)$//r,
-    old          => '5.24.4',
-    (
-      defined $perl_sources{$perl_version} ? (perl_source  => $perl_sources{$perl_version}) : ()
-    ),
-    core_p7 => 1,
   );
 }
+
+#foreach my $perl_version ('7.0.0')
+#{
+#  generate_dockerfile("$perl_version-core-p7", ['7.0-core-p7'],
+#    dist_release => $stable,
+#    perl_dev     => 1,
+#    perl_flags   => '-Dusedevel',
+#    perl_version => $perl_version,
+#    perl_suffix  => $perl_version =~ s/(-RC[0-9]+|)$//r,
+#    old          => '5.24.4',
+#    (
+#      defined $perl_sources{$perl_version} ? (perl_source  => $perl_sources{$perl_version}) : ()
+#    ),
+#    core_p7 => 1,
+#  );
+#}
 
 foreach my $perl_version (qw( 5.12.5 5.10.1 5.10.0 5.8.9 5.8.8 5.8.7 5.8.6 5.8.5 5.8.4 ))
 {
