@@ -131,6 +131,7 @@ script:
 
 jobs:
   include:
+    - env: CIP_TAG=static
     - env: CIP_TAG=5.33
     - env: CIP_TAG=5.32
     - env: CIP_TAG=5.30
