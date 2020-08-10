@@ -14,9 +14,11 @@ while [ "x$1" != "x" ]; do
   tag=$(echo $1 | sed 's/^.*\///')
 
   if [ -f "versions/$ARCH/$tag/Dockerfile" ]; then
+    echo +docker build -f versions/$ARCH/$tag/Dockerfile -t plicease/ciperl:"$tag" .
     docker build -f versions/$ARCH/$tag/Dockerfile -t plicease/ciperl:"$tag" .
     ./retry docker push plicease/ciperl:"$tag"
   elif [ -f "base/$ARCH/$tag/Dockerfile" ]; then
+    echo +docker build -f base/$ARCH/$tag/Dockerfile -t plicease/ciperl-base:"$tag" .
     docker build -f base/$ARCH/$tag/Dockerfile -t plicease/ciperl-base:"$tag" .
     ./retry docker push plicease/ciperl-base:"$tag"
   else
