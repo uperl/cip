@@ -39,7 +39,7 @@ RUN cpanm -n Perl::Critic                                      \
              Dist::Zilla::Plugin::Meta::Dynamic::Config        \
              Dist::Zilla::Plugin::DynamicPrereqs               \
              Test::Pod::Spelling::CommonMistakes               \
-             Dist::Zilla::PluginBundle::Author::Plicease       \
+             Dist::Zilla::PluginBundle::Author::Plicease@2.58  \
              Dist::Zilla::Plugin::MetaProvides::Package        \
              Dist::Zilla::Plugin::Bootstrap::lib               \
              Alien::Build::Plugin::Decode::SourceForge         \
