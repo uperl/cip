@@ -13,7 +13,7 @@ my $tt = Template->new;
 my $stable        = 'buster';
 my $stable32      = 'buster32';
 my $latest_stable = '5.32.0';
-my $latest_dev    = '5.33.3';
+my $latest_dev    = '5.33.5';
 
 my %perl_sources = (
   '5.28.1'  => 'https://cpan.metacpan.org/authors/id/S/SH/SHAY/perl-5.28.1.tar.gz',
@@ -27,6 +27,7 @@ my %perl_sources = (
   '5.33.1'  => 'https://cpan.metacpan.org/authors/id/E/ET/ETHER/perl-5.33.1.tar.gz',
   '5.33.2'  => 'https://cpan.metacpan.org/authors/id/X/XS/XSAWYERX/perl-5.33.2.tar.gz',
   '5.33.3'  => 'https://cpan.metacpan.org/authors/id/S/SH/SHAY/perl-5.33.3.tar.gz',
+  '5.33.5'  => 'https://cpan.metacpan.org/authors/id/C/CO/CORION/perl-5.33.5.tar.gz',
   '7.0.0'   => 'https://github.com/Perl/perl5/archive/core-p7.tar.gz',
 );
 
@@ -182,22 +183,6 @@ foreach my $perl_version ($latest_dev)
     perl_version => $perl_version,
   );
 }
-
-#foreach my $perl_version ('7.0.0')
-#{
-#  generate_dockerfile("$perl_version-core-p7", ['7.0-core-p7'],
-#    dist_release => $stable,
-#    perl_dev     => 1,
-#    perl_flags   => '-Dusedevel',
-#    perl_version => $perl_version,
-#    perl_suffix  => $perl_version =~ s/(-RC[0-9]+|)$//r,
-#    old          => '5.24.4',
-#    (
-#      defined $perl_sources{$perl_version} ? (perl_source  => $perl_sources{$perl_version}) : ()
-#    ),
-#    core_p7 => 1,
-#  );
-#}
 
 foreach my $perl_version (qw( 5.12.5 5.10.1 5.10.0 5.8.9 5.8.8 5.8.7 5.8.6 5.8.5 5.8.4 ))
 {
