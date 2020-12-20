@@ -164,24 +164,34 @@ foreach my $perl_version ($latest_stable, qw( 5.30.3 5.28.2 5.26.3 5.24.4 5.22.4
 
 foreach my $perl_version ($latest_dev)
 {
-  my @aliases;
-  push @aliases, $perl_version;
-  push @aliases, $perl_version =~ s/\.[0-9]+$//r;
-  my $rc = 0;
-  if($perl_version =~ /-RC[0-9]/)
+  foreach my $dist_release ($stable, 'buster-arm64v8')
   {
-    $rc = 1;
-    push @aliases, $perl_version =~ s/\.[0-9]+-RC[0-9]+$//r;
-    push @aliases, $perl_version =~ s/-RC[0-9]+$//r . "-$stable";
-    push @aliases, $perl_version =~ s/\.[0-9]+-RC[0-9]+$//r . "-$stable";
+    my @aliases;
+    if($dist_release eq $stable)
+    {
+      push @aliases, $perl_version;
+      push @aliases, $perl_version =~ s/\.[0-9]+$//r;
+    }
+    else
+    {
+      push @aliases, $perl_version =~ s/\.[0-9]+$//r . "-$dist_release";
+    }
+    my $rc = 0;
+    if($perl_version =~ /-RC[0-9]/)
+    {
+      $rc = 1;
+      push @aliases, $perl_version =~ s/\.[0-9]+-RC[0-9]+$//r if $stable eq $dist_release;
+      push @aliases, $perl_version =~ s/-RC[0-9]+$//r . "-$dist_release";
+      push @aliases, $perl_version =~ s/\.[0-9]+-RC[0-9]+$//r . "-$dist_release";
+    }
+    generate_dockerfile("$perl_version-$dist_release", \@aliases,
+      dist_release => $dist_release,
+      perl_dev     => 1,
+      perl_suffix  => $perl_version =~ s/(-RC[0-9]+|)$//r,
+      perl_flags   => '-Dusedevel',
+      perl_version => $perl_version,
+    );
   }
-  generate_dockerfile("$perl_version-$stable", \@aliases,
-    dist_release => $stable,
-    perl_dev     => 1,
-    perl_suffix  => $perl_version =~ s/(-RC[0-9]+|)$//r,
-    perl_flags   => '-Dusedevel',
-    perl_version => $perl_version,
-  );
 }
 
 foreach my $perl_version (qw( 5.12.5 5.10.1 5.10.0 5.8.9 5.8.8 5.8.7 5.8.6 5.8.5 5.8.4 ))
