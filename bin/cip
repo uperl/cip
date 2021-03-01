@@ -208,8 +208,8 @@ case "$command" in
     if [ ! -z "${DOCKERHUB_PULL_USERNAME:-}" ]; then
       echo "${DOCKERHUB_PULL_PASSWORD}" | docker login --username "${DOCKERHUB_PULL_USERNAME}" --password-stdin
     else
-      echo "no credentials"
-      exit 2
+      echo "warning: no credentials"
+      exit;
     fi
   ;;
 
