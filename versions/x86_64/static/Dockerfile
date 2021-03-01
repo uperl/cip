@@ -55,6 +55,7 @@ RUN cpanm -n Perl::Critic                                      \
              ExtUtils::CppGuess                                \
              Dist::Zilla::Plugin::Alt                          \
              Dist::Zilla::Plugin::OnlyCorePrereqs              \
+             Dist::Zilla::Plugin::InsertExample@0.10           \
              https://dist.wdlabs.com/Test-Spelling-0.20.tar.gz && rm -rf ~/.cpanm
 
 # don't include Test::Strict, because it requires XS modules to be built

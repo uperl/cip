@@ -21,6 +21,7 @@ subcommands:
   cip travis_yml
     - generate a .travis.yml that uses cip
 
+  cip login
   cip start
   cip before_install
   cip before-install
@@ -201,6 +202,15 @@ case "$command" in
       $CIP_USE_TTY \
       plicease/ciperl:$CIP_TAG \
       dzil run --no-build prove -lr xt
+  ;;
+
+  login)
+    if [ ! -z "${DOCKERHUB_PULL_USERNAME:-}" ]; then
+      echo "${DOCKERHUB_PULL_PASSWORD}" | docker login --username "${DOCKERHUB_PULL_USERNAME}" --password-stdin
+    else
+      echo "no credentials"
+      exit 2
+    fi
   ;;
 
   before_install|before-install|start)
