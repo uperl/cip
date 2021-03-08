@@ -5,3 +5,4 @@ chmod +x /tmp/cip
 sudo mv /tmp/cip /usr/bin
 md5sum /usr/bin/cip
 sudo chown -R 1000:1000 .
+sudo chown -R $(id -u):$(id -g) .git
