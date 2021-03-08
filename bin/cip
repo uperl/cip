@@ -159,13 +159,16 @@ cache:
 EOF
 }
 
-mkdir -p ~/.cip/install-cache/$CIP_TAG
-mkdir -p ~/.cip/dzil-cache/$CIP_TAG
-if [ "x$TRAVIS" == "xtrue" ]; then
-  if ! [ -e /tmp/travis-chmod-fixup ]; then
+if [ "x$GITHUB_ACTIONS" == "xtrue" ]; then
+  sudo mkdir -p ~/.cip/install-cache/$CIP_TAG ~/.cip/dzil-cache/$CIP_TAG
+else
+  mkdir -p ~/.cip/install-cache/$CIP_TAG ~/.cip/dzil-cache/$CIP_TAG
+fi
+if [ "x$TRAVIS" == "xtrue" ] || [ "x$GITHUB_ACTIONS" == "xtrue" ]; then
+  if ! [ -e /tmp/cip-chmod-fixup ]; then
     find ~/.cip/dzil-cache    -print0 | xargs -0 -L 300 sudo chown -R 0:0
     find ~/.cip/install-cache -print0 | xargs -0 -L 300 sudo chown -R 1000:1000
-    touch /tmp/travis-chmod-fixup
+    touch /tmp/cip-chmod-fixup
   fi
 fi
 
