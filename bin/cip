@@ -76,6 +76,9 @@ subcommands:
   cip pkg [ package ]
     - install package
 
+  cip cache-key
+    - print out a cache key for github actions
+
 environment:
 
   CIP_TAG  the docker tag for plicease/ciperl defaults to 'default'
@@ -472,6 +475,10 @@ case "$command" in
 
       esac
     fi
+    ;;
+
+  cache-key)
+    echo cip-$CIP_TAG-$( cip exec perl -e 'print $^V' )
     ;;
 
   *)
