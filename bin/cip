@@ -18,8 +18,8 @@ usage: $0 [subcommand]
 
 subcommands:
 
-  cip travis_yml
-    - generate a .travis.yml that uses cip
+  cip config
+    - generate a .travis.yml and .github/workflow/linux.yml that uses cip
 
   cip login
   cip start
@@ -120,53 +120,6 @@ function dist_dir_name {
   export CIP_DIST_DIR=$(grep ^name dist.ini | head -1 | cut -d= -f2 | sed 's/^[ ]*//' | sed 's/[ ]*$//')-$(grep ^version dist.ini | head -1 | cut -d= -f2 | sed 's/^[ ]*//' | sed 's/[ ]*$//')
 }
 
-function travis_yml {
-  cat > .travis.yml <<'EOF'
-language: minimal
-dist: xenial
-services:
-  - docker
-
-before_install:
-  - curl https://raw.githubusercontent.com/plicease/cip/main/bin/travis-bootstrap | bash
-  - cip before-install
-
-install:
-  - cip diag
-  - cip install
-
-script:
-  - cip script
-
-jobs:
-  include:
-    - env: CIP_TAG=static
-    - env: CIP_TAG=5.33
-    - env: CIP_TAG=5.32
-    - env: CIP_TAG=5.30
-    - env: CIP_TAG=5.28
-    - env: CIP_TAG=5.26
-    - env: CIP_TAG=5.24
-    - env: CIP_TAG=5.22
-    - env: CIP_TAG=5.20
-    - env: CIP_TAG=5.18
-    - env: CIP_TAG=5.16
-    - env: CIP_TAG=5.14
-    - env: CIP_TAG=5.12
-    - env: CIP_TAG=5.10
-    - env: CIP_TAG=5.8
-
-branches:
-  only:
-    - master
-    - main
-
-cache:
-  directories:
-    - "$HOME/.cip"
-EOF
-}
-
 case "$command" in
 
   cache-key)
@@ -191,8 +144,11 @@ esac
 
 case "$command" in
 
-  travis_yml)
-    travis_yml
+  config)
+    CONFIG=$(realpath $(dirname $0)/../config)
+    cp $CONFIG/travis.yml .travis.yml
+    mkdir -p .github/workflows
+    cp $CONFIG/github.yml .github/workflows/linux.yml
     ;;
 
   run)
