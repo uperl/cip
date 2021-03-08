@@ -224,9 +224,9 @@ case "$command" in
     fi
   ;;
 
-  before_install|before-install|start)
+  start)
     if [ "$CIP_TAG" == "static" ]; then
-      echo no before-install for static
+      echo no start for static
       exit
     fi
     docker run \
@@ -239,6 +239,18 @@ case "$command" in
       -d \
       plicease/ciperl:$CIP_TAG \
       sleep 86400
+    ;;
+
+  before_install|before-install)
+    if [ "x$TRAVIS" != "xtrue" ]; then
+      echo "before-install is legacy command for travis-ci only"
+      false
+    fi
+    if [ "$CIP_TAG" == "static" ]; then
+      echo no before-install for static
+      exit
+    fi
+    cip start
     case "$command" in
       before_install|before-install)
         echo "+docker version"
@@ -273,6 +285,12 @@ case "$command" in
     if [ "$CIP_TAG" == "static" ]; then
       echo no install for static
       exit
+    fi
+    if [ "x$TRAVIS" != "xtrue" ]; then
+      cip bash -c 'curl https://cpanmin.us | perl - -n --reinstall App::cpanminus'
+      if [ -f maint/cip-before-install ]; then
+        ./maint/cip-before-install
+      fi
     fi
     cip_local_lib
     if [ -f maint/cip-install ]; then
