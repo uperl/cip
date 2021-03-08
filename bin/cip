@@ -57,9 +57,14 @@ subcommands:
 
   cip stop_all
   cip stop-all
+    - stop all background cip containes and remove scn images
+
+  cip clean
+    - stop container, and remove dependency cache
+
   cip clean_all
   cip clean-all
-    - stop all background cip containes and remove scn images
+    - stop all background cip containers and remove all dependency caches
 
   cip run [ CIP_TAG ]
     - run shell in a ciperl container with the given tag
@@ -169,7 +174,7 @@ else
 fi
 if [ "x$TRAVIS" == "xtrue" ] || [ "x$GITHUB_ACTIONS" == "xtrue" ]; then
   if ! [ -e /tmp/cip-chmod-fixup ]; then
-    find ~/.cip/dzil-cache    -print0 | xargs -0 -L 300 sudo chown -R 0:0
+    find ~/.cip/dzil-cache    -print0 | xargs -0 -L 300 sudo chown -R 1000:1000
     find ~/.cip/install-cache -print0 | xargs -0 -L 300 sudo chown -R 1000:1000
     touch /tmp/cip-chmod-fixup
   fi
@@ -275,10 +280,10 @@ case "$command" in
     elif [ -f dist.ini ]; then
       echo ":::: DZIL DEPS   ::::"
       if [ -f alienfile ]; then
-        cip sudo bash -c 'dzil-af missing -p configure | dzil-cpanm -n'
-        cip sudo bash -c 'dzil-af missing | dzil-cpanm -n'
+        cip exec bash -c 'dzil-af missing -p configure | dzil-cpanm -n'
+        cip exec bash -c 'dzil-af missing | dzil-cpanm -n'
       fi
-      cip sudo bash -c 'dzil-dzil authordeps --missing | dzil-cpanm -n'
+      cip exec bash -c 'dzil-dzil authordeps --missing | dzil-cpanm -n'
       echo ":::: DZIL BUILD  ::::"
       cip exec dzil-dzil build
       echo ":::: MODULE DEPS ::::"
@@ -423,7 +428,12 @@ case "$command" in
     docker container rm /$CIP_CONT
     ;;
 
-  stop_all|stop-all|clean_all|clean-all)
+  clean)
+    cip stop
+    rm -rf ~/.cip/install-cache/$CIP_TAG ~/.cip/dzil-cache/$CIP_TAG
+    ;;
+
+  stop_all|stop-all)
     env CIP_QUIET=1 cip scn clean
     for name in $( docker ps --format '{{json .Names}}' ) ; do
       name=$( echo $name | jq -r . )
@@ -432,6 +442,11 @@ case "$command" in
         docker container rm /$name
       fi
     done
+    ;;
+
+  clean_all|clean-all)
+    cip stop-all
+    rm -rf ~/.cip
     ;;
 
   pkg)
