@@ -511,7 +511,7 @@ case "$command" in
     ;;
 
   cache-key)
-    echo cip-$CIP_TAG-$( cip exec perl -e 'print $^V' )
+    echo cip-$CIP_TAG-$( docker run --rm $CIP_USE_TTY plicease/ciperl:$CIP_TAG perl -e 'print $^V' )
     ;;
 
   *)
