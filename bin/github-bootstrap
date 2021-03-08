@@ -6,3 +6,4 @@ sudo mv /tmp/cip /usr/bin
 md5sum /usr/bin/cip
 sudo mkdir -p ~/.cip
 sudo chown -R 1000:1000 ~/.cip
+sudo chown -R 1000:1000 .
