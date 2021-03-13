@@ -19,6 +19,7 @@ usage: $0 [subcommand]
 subcommands:
 
   cip config
+  cip config-alien
     - generate a .travis.yml and .github/workflow/linux.yml that uses cip
 
   cip login
@@ -149,6 +150,13 @@ case "$command" in
     cp $CONFIG/travis.yml .travis.yml
     mkdir -p .github/workflows
     cp $CONFIG/github.yml .github/workflows/linux.yml
+    ;;
+
+  config-alien)
+    CONFIG=$(realpath $(dirname $0)/../config)
+    cp $CONFIG/travis.yml .travis.yml
+    mkdir -p .github/workflows
+    cp $CONFIG/github-alien.yml .github/workflows/linux.yml
     ;;
 
   run)
