@@ -207,7 +207,7 @@ foreach my $perl_version (qw( 5.22.4 5.20.3 5.18.4 5.16.3 5.14.4 5.12.5 5.10.1 5
     push @aliases, ($perl_version =~ s/\.[0-9]+$//r) . "-$stable";
   }
   generate_dockerfile("$perl_version-$stable", \@aliases,
-    old          => '5.24.4',
+    old          => '5.30.3',
     dist_release => $stable,
     perl_version => $perl_version,
   );
