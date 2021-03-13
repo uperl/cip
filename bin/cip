@@ -147,14 +147,12 @@ case "$command" in
 
   config)
     CONFIG=$(realpath $(dirname $0)/../config)
-    cp $CONFIG/travis.yml .travis.yml
     mkdir -p .github/workflows
     cp $CONFIG/github.yml .github/workflows/linux.yml
     ;;
 
   config-alien)
     CONFIG=$(realpath $(dirname $0)/../config)
-    cp $CONFIG/travis.yml .travis.yml
     mkdir -p .github/workflows
     cp $CONFIG/github-alien.yml .github/workflows/linux.yml
     ;;
