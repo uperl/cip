@@ -220,7 +220,7 @@ foreach my $flag (qw( threads longdouble quadmath ))
     next if $flag ne 'threads' && $perl_version =~ /^(5\.8|5\.10)\./;
     next if $flag eq 'quadmath' && $perl_version eq '5.14.4';
     my $old;
-    $old = '5.24.4' if $perl_version =~ /^(5\.8|5\.10)\./;
+    $old = '5.30.3';
     my $tag = "$perl_version-$stable-$flag";
     my @aliases;
     push @aliases, "$perl_version-$flag";
