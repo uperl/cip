@@ -482,7 +482,18 @@ case "$command" in
     ;;
 
   cache-key)
-    echo cip-$CIP_TAG-$( docker run --rm $CIP_USE_TTY plicease/ciperl:$CIP_TAG perl -e 'print $^V' )
+    # The Perl CIP_TAG for this container
+    echo -n perl-$CIP_TAG
+    # We also want the full Perl version, because bumping dev version will be incompatible
+    # with the old version
+    echo -n -$( docker run --rm $CIP_USE_TTY plicease/ciperl:$CIP_TAG perl -e 'print $]' )
+    # We also want the full version of the dzil Perl, since that could change too
+    echo -n -dzil-$( docker run --rm $CIP_USE_TTY plicease/ciperl:$CIP_TAG bash -c '$(head -1 $(dzil-wrapper which dzil)|cut -d! -f2) -e "print $]"' )
+    # Finally we have a counter that we can bump at the end.  Sometimes we make cache mistakes
+    # and we need to clear the cache.  GitHub Actions is kinda dumb in that there is no way
+    # to clear the cache for just one matrix entry or repository, so unfortunately we have
+    # to make a global bump when things go wrong
+    echo -0
     ;;
 
   *)
