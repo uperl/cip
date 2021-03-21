@@ -39,7 +39,7 @@ RUN cpanm -n Perl::Critic                                      \
              Dist::Zilla::Plugin::Meta::Dynamic::Config        \
              Dist::Zilla::Plugin::DynamicPrereqs               \
              Test::Pod::Spelling::CommonMistakes               \
-             Dist::Zilla::PluginBundle::Author::Plicease@2.59  \
+             Dist::Zilla::PluginBundle::Author::Plicease       \
              Dist::Zilla::Plugin::MetaProvides::Package        \
              Dist::Zilla::Plugin::Bootstrap::lib               \
              Alien::Build::Plugin::Decode::SourceForge         \
@@ -55,7 +55,7 @@ RUN cpanm -n Perl::Critic                                      \
              ExtUtils::CppGuess                                \
              Dist::Zilla::Plugin::Alt                          \
              Dist::Zilla::Plugin::OnlyCorePrereqs              \
-             Dist::Zilla::Plugin::InsertExample@0.10           \
+             Dist::Zilla::Plugin::InsertExample                \
              https://dist.wdlabs.com/Test-Spelling-0.20.tar.gz && rm -rf ~/.cpanm
 
 # don't include Test::Strict, because it requires XS modules to be built
