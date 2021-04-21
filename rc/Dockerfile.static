@@ -15,6 +15,8 @@ RUN  apt-get update \
   && apt-get install --no-install-recommends \
       aspell \
       aspell-en \
+      libhunspell-dev \
+      libffi-dev \
       locales \
   && apt-get -q autoremove \
   && apt-get -q clean \
@@ -46,7 +48,7 @@ RUN cpanm -n Perl::Critic                                      \
              Alien::Build::Plugin::Probe::GnuWin32             \
              Env::ShellWords                                   \
              Dist::Zilla::Plugin::SetScriptShebang             \
-             Dist::Zilla::Plugin::CommentOut                   \
+             Dist::Zilla::Plugin::CommentOut@0.04              \
              Alien::Build::Plugin::Build::Copy                 \
              Dist::Zilla::Plugin::MathInt64                    \
              Dist::Zilla::Plugin::FFI::Build                   \
@@ -56,6 +58,10 @@ RUN cpanm -n Perl::Critic                                      \
              Dist::Zilla::Plugin::Alt                          \
              Dist::Zilla::Plugin::OnlyCorePrereqs              \
              Dist::Zilla::Plugin::InsertExample                \
+             Text::Hunspell::FFI                               \
+             File::Globstar                                    \
+             https://dist.wdlabs.com/Pod-Simple-Words-0.02.tar.gz \
+             https://dist.wdlabs.com/Test-SpellCheck-Plugin-Lang-EN-US-0.01.tar.gz \
              https://dist.wdlabs.com/Test-Spelling-0.20.tar.gz && rm -rf ~/.cpanm
 
 # don't include Test::Strict, because it requires XS modules to be built
