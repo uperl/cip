@@ -284,6 +284,9 @@ case "$command" in
       echo "unknown installer"
       exit 2;
     fi
+    if [ -f maint/cip-after-install ]; then
+      ./maint/cip-after-install
+    fi
     ;;
 
   scn)

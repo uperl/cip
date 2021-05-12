@@ -60,9 +60,10 @@ RUN cpanm -n Perl::Critic                                      \
              Dist::Zilla::Plugin::InsertExample                \
              Text::Hunspell::FFI                               \
              File::Globstar                                    \
-             https://dist.wdlabs.com/Pod-Simple-Words-0.02.tar.gz \
+             https://dist.wdlabs.com/Text-HumanComputerWords-0.03.tar.gz \
+             https://dist.wdlabs.com/Pod-Simple-Words-0.06.tar.gz \
              https://dist.wdlabs.com/Test-SpellCheck-Plugin-Lang-EN-US-0.01.tar.gz \
-             https://dist.wdlabs.com/Test-Spelling-0.20.tar.gz && rm -rf ~/.cpanm
+             https://dist.wdlabs.com/Test-Spelling-0.20.tar.gz && rm -fr ~/.cpanm
 
 # don't include Test::Strict, because it requires XS modules to be built
 #RUN cpanm -n Test::Strict
