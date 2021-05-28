@@ -23,23 +23,23 @@ ADD rc/dzil-wrapper /opt/perl/5.34.0/bin
 
 RUN chmod +x /opt/perl/5.34.0/bin/dzil-*
 
-RUN apt-get update                                                                    \
- && apt-get install                                                                   \
-      autoconf                                                                        \
-      automake                                                                        \
-      libtool                                                                         \
-      texinfo                                                                         \
- && apt-get -q autoremove                                                             \
- && apt-get -q  clean                                                                 \
- && rm -rf /var/lib/apt/lists/*                                                       \
- && cd /usr/src                                                                       \
- && curl https://codeload.github.com/libffi/libffi/tar.gz/master | tar zxvf -         \
- && cd libffi-master                                                                  \
- && ./autogen.sh                                                                      \
- && ./configure --prefix=/opt/libffi --disable-shared && make && make install         \
- && cd ..                                                                             \
- && apt-get -q purge autoconf automake libtool texinfo                                \
- && apt-get -q autoremove                                                             \
+RUN apt-get update                                                                       \
+ && apt-get install                                                                      \
+      autoconf                                                                           \
+      automake                                                                           \
+      libtool                                                                            \
+      texinfo                                                                            \
+ && apt-get -q autoremove                                                                \
+ && apt-get -q  clean                                                                    \
+ && rm -rf /var/lib/apt/lists/*                                                          \
+ && cd /usr/src                                                                          \
+ && curl https://codeload.github.com/libffi/libffi/tar.gz/master | tar zxvf -            \
+ && cd libffi-master                                                                     \
+ && ./autogen.sh                                                                         \
+ && ./configure --with-pic --prefix=/opt/libffi --disable-shared && make && make install \
+ && cd ..                                                                                \
+ && apt-get -q purge autoconf automake libtool texinfo                                   \
+ && apt-get -q autoremove                                                                \
  && apt-get -q clean
 
 ENV PKG_CONFIG_PATH /opt/libffi/lib/pkgconfig
