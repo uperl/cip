@@ -13,7 +13,7 @@ my $tt = Template->new;
 my $stable        = 'buster';
 my $stable32      = 'buster32';
 my $latest_stable = '5.34.0';
-my $latest_dev    = '5.35.0';
+my $latest_dev    = '5.35.1';
 
 my %perl_sources = (
   '5.28.1'  => 'https://cpan.metacpan.org/authors/id/S/SH/SHAY/perl-5.28.1.tar.gz',
@@ -35,6 +35,7 @@ my %perl_sources = (
   '5.33.9'  => 'https://cpan.metacpan.org/authors/id/T/TO/TODDR/perl-5.33.9.tar.gz',
   '5.34.0'  => 'https://cpan.metacpan.org/authors/id/X/XS/XSAWYERX/perl-5.34.0.tar.gz',
   '5.35.0'  => 'https://cpan.metacpan.org/authors/id/R/RJ/RJBS/perl-5.35.0.tar.gz',
+  '5.35.1'  => 'https://cpan.metacpan.org/authors/id/C/CO/CORION/perl-5.35.1.tar.gz',
   '7.0.0'   => 'https://github.com/Perl/perl5/archive/core-p7.tar.gz',
 );
 
