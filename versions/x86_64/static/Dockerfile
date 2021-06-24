@@ -1,4 +1,4 @@
-FROM plicease/ciperl:5.30
+FROM plicease/ciperl:5.34
 LABEL maintainer="Graham Ollis <plicease@cpan.org>"
 
 ENV PATH /opt/dzil/bin:$PATH
@@ -60,7 +60,6 @@ RUN cpanm -n Perl::Critic                                      \
              Dist::Zilla::Plugin::InsertExample                \
              Text::Hunspell::FFI                               \
              File::Globstar                                    \
-             https://dist.wdlabs.com/Text-HumanComputerWords-0.03.tar.gz \
              https://dist.wdlabs.com/Pod-Simple-Words-0.06.tar.gz \
              https://dist.wdlabs.com/Test-SpellCheck-Plugin-Lang-EN-US-0.01.tar.gz \
              https://dist.wdlabs.com/Test-Spelling-0.20.tar.gz && rm -fr ~/.cpanm
