@@ -1,4 +1,4 @@
-FROM fedora:29
+FROM fedora:34
 LABEL maintainer="Graham Ollis <plicease@cpan.org>"
 
 # Note: system perl is not installed by default
