@@ -16,6 +16,7 @@ RUN  apt-get update \
       aspell \
       aspell-en \
       libhunspell-dev \
+      libarchive-dev \
       libffi-dev \
       locales \
   && apt-get -q autoremove \
@@ -27,7 +28,7 @@ RUN locale-gen
 RUN dpkg-reconfigure locales
 
 RUN cpanm -n Perl::Critic                                      \
-             Perl::Critic::Freenode                            \
+             Perl::Critic::Community                           \
              YAML                                              \
              Test::EOL                                         \
              Test::NoTabs                                      \
@@ -48,7 +49,7 @@ RUN cpanm -n Perl::Critic                                      \
              Alien::Build::Plugin::Probe::GnuWin32             \
              Env::ShellWords                                   \
              Dist::Zilla::Plugin::SetScriptShebang             \
-             Dist::Zilla::Plugin::CommentOut@0.04              \
+             Dist::Zilla::Plugin::CommentOut                   \
              Alien::Build::Plugin::Build::Copy                 \
              Dist::Zilla::Plugin::MathInt64                    \
              Dist::Zilla::Plugin::FFI::Build                   \
@@ -58,9 +59,10 @@ RUN cpanm -n Perl::Critic                                      \
              Dist::Zilla::Plugin::Alt                          \
              Dist::Zilla::Plugin::OnlyCorePrereqs              \
              Dist::Zilla::Plugin::InsertExample                \
+             Dist::Zilla::Plugin::Libarchive                   \
              Text::Hunspell::FFI                               \
              File::Globstar                                    \
-             https://dist.wdlabs.com/Pod-Simple-Words-0.06.tar.gz \
+             Pod::Simple::Words                                \
              https://dist.wdlabs.com/Test-SpellCheck-Plugin-Lang-EN-US-0.01.tar.gz \
              https://dist.wdlabs.com/Test-Spelling-0.20.tar.gz && rm -fr ~/.cpanm
 
