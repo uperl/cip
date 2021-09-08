@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+set -ex
 
 if [ "x$CIP_TAG" == "x" ]; then
   export CIP_TAG=default
@@ -118,7 +118,11 @@ function env2docker {
 }
 
 function dist_dir_name {
-  export CIP_DIST_DIR=$(grep ^name dist.ini | head -1 | cut -d= -f2 | sed 's/^[ ]*//' | sed 's/[ ]*$//')-$(grep ^version dist.ini | head -1 | cut -d= -f2 | sed 's/^[ ]*//' | sed 's/[ ]*$//')
+  if [ -z "$CIP_DIST_VER" ]; then
+    export CIP_DIST_DIR=$(grep ^name dist.ini | head -1 | cut -d= -f2 | sed 's/^[ ]*//' | sed 's/[ ]*$//')-$(grep ^version dist.ini | head -1 | cut -d= -f2 | sed 's/^[ ]*//' | sed 's/[ ]*$//')
+  else
+    export CIP_DIST_DIR=$(grep ^name dist.ini | head -1 | cut -d= -f2 | sed 's/^[ ]*//' | sed 's/[ ]*$//')-$CIP_DIST_VER
+  fi
 }
 
 case "$command" in
