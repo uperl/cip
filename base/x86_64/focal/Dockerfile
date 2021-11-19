@@ -23,6 +23,8 @@ RUN  echo 'APT::Get::Assume-Yes "true";' >> /etc/apt/apt.conf.d/00cip  \
        zlib1g-dev \
        pkg-config \
        file \
+       libffi-dev \
+       libarchive-dev \
   && apt-get -q autoremove \
   && apt-get -q clean \
   && rm -rf /var/lib/apt/lists/*

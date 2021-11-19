@@ -1,4 +1,4 @@
-FROM plicease/ciperl-base:fedora34
+FROM plicease/ciperl-base:fedora35
 LABEL maintainer="Graham Ollis <plicease@cpan.org>"
 
 RUN  mkdir /tmp/perl-build \
@@ -30,4 +30,4 @@ RUN chmod +x /opt/perl/5.34.0/bin/dzil-*
 ENV CI true
 ENV CIPSOMETHING true
 ENV CONTINUOUS_INTEGRATION true
-ENV CIPDIST fedora34
+ENV CIPDIST fedora35

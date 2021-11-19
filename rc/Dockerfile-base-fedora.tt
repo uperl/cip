@@ -14,6 +14,8 @@ RUN yum install -y \
      openssl-devel \
      zlib-devel \
      file \
+     libffi-devel \
+     libarchive-devel \
   && yum clean all
 
 RUN mkdir /work

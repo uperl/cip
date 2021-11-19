@@ -14,7 +14,9 @@ RUN apk add --no-cache \
   curl \
   musl-dev \
   zlib-dev \
-  file
+  file \
+  libffi-dev \
+  libarchive-dev
 
 RUN mkdir /work
 

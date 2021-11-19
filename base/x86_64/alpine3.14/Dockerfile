@@ -1,4 +1,4 @@
-FROM alpine:3.11
+FROM alpine:3.14
 LABEL maintainer="Graham Ollis <plicease@cpan.org>"
 
 RUN apk add --no-cache \
@@ -14,7 +14,9 @@ RUN apk add --no-cache \
   curl \
   musl-dev \
   zlib-dev \
-  file
+  file \
+  libffi-dev \
+  libarchive-dev
 
 RUN mkdir /work
 

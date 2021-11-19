@@ -1,4 +1,4 @@
-FROM fedora:34
+FROM fedora:35
 LABEL maintainer="Graham Ollis <plicease@cpan.org>"
 
 # Note: system perl is not installed by default
@@ -14,6 +14,8 @@ RUN yum install -y \
      openssl-devel \
      zlib-devel \
      file \
+     libffi-devel \
+     libarchive-devel \
   && yum clean all
 
 RUN mkdir /work
