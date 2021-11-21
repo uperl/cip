@@ -3,8 +3,8 @@
 use strict;
 use warnings;
 use autodie;
-use 5.020;
-use experimental qw( postderef );
+use 5.024;
+use experimental qw( signatures );
 use Template;
 use File::chdir;
 use Path::Tiny qw( path );
@@ -109,9 +109,8 @@ my %perl_sources = (
   }
 }
 
-sub generate_dockerfile
+sub generate_dockerfile ($tag, $aliases, %vars)
 {
-  my($tag, $aliases, %vars) = @_;
   my $arch = $vars{dist_release} =~ /-arm64v8/ ? 'aarch64' : 'x86_64';
   my $path = path("versions/$arch")->child($tag);
   $path->mkpath;

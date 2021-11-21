@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use feature qw( say );
+use 5.024;
 use autodie qw( :system );
 
 for(1..10)
