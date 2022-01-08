@@ -61,8 +61,9 @@ RUN cpanm -n Perl::Critic                                      \
              Dist::Zilla::Plugin::InsertExample                \
              Dist::Zilla::Plugin::Libarchive                   \
              Text::Hunspell::FFI                               \
-             File::Globstar                                    \
              Pod::Simple::Words                                \
+             File::Globstar                                    \
+             Dist::Zilla::Plugin::Prereqs::Soften              \
              https://dist.wdlabs.com/Test-SpellCheck-Plugin-Lang-EN-US-0.01.tar.gz \
              https://dist.wdlabs.com/Test-Spelling-0.20.tar.gz && rm -fr ~/.cpanm
 
