@@ -178,16 +178,29 @@ case "$command" in
 
   check)
     export CIP_TAG=static
-    docker run \
-      -v `pwd`:/work \
-      -v ~/.cip:/home/cip/.cip \
-      -v ~/.cip/install-cache/"$CIP_TAG":/home/cip/perl5 \
-      -v ~/.cip/dzil-cache/"$CIP_TAG":/home/cip/dzil \
-      --tmpfs /tmp \
-      --rm \
-      $CIP_USE_TTY \
-      plicease/ciperl:$CIP_TAG \
-      dzil run --no-build prove -lr xt
+    if [ -f dist.ini ]; then
+      docker run \
+        -v `pwd`:/work \
+        -v ~/.cip:/home/cip/.cip \
+        -v ~/.cip/install-cache/"$CIP_TAG":/home/cip/perl5 \
+        -v ~/.cip/dzil-cache/"$CIP_TAG":/home/cip/dzil \
+        --tmpfs /tmp \
+        --rm \
+        $CIP_USE_TTY \
+        plicease/ciperl:$CIP_TAG \
+        dzil run --no-build prove -lr xt
+    else
+      docker run \
+        -v `pwd`:/work \
+        -v ~/.cip:/home/cip/.cip \
+        -v ~/.cip/install-cache/"$CIP_TAG":/home/cip/perl5 \
+        -v ~/.cip/dzil-cache/"$CIP_TAG":/home/cip/dzil \
+        --tmpfs /tmp \
+        --rm \
+        $CIP_USE_TTY \
+        plicease/ciperl:$CIP_TAG \
+        prove -lr xt
+    fi
   ;;
 
   login)
