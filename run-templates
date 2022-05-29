@@ -161,7 +161,7 @@ foreach my $perl_version ($latest_stable, qw( 5.32.1 5.30.3 5.28.3 5.26.3 5.24.4
   }
 }
 
-foreach my $perl_version ($latest_stable, qw( 5.32.1 5.30.3 5.28.2 5.26.3 5.24.4 ))
+foreach my $perl_version ($latest_stable, qw( 5.34.1 5.32.1 5.30.3 5.28.2 5.26.3 5.24.4 ))
 {
   my @aliases;
   push @aliases, $perl_version;
