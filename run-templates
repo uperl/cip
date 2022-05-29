@@ -12,8 +12,8 @@ use Path::Tiny qw( path );
 my $tt = Template->new;
 my $stable        = 'bullseye';
 my $stable32      = 'bullseye32';
-my $latest_stable = '5.34.0';
-my $latest_dev    = '5.35.8';
+my $latest_stable = '5.36.0';
+my $latest_dev    = '5.37.0';
 
 my %perl_sources = (
   '5.28.1'  => 'https://cpan.metacpan.org/authors/id/S/SH/SHAY/perl-5.28.1.tar.gz',
@@ -39,6 +39,8 @@ my %perl_sources = (
   '5.35.5'  => 'https://cpan.metacpan.org/authors/id/L/LE/LEONT/perl-5.35.5.tar.gz',
   '5.35.6'  => 'https://cpan.metacpan.org/authors/id/H/HY/HYDAHY/perl-5.35.6.tar.gz',
   '5.35.8'  => 'https://cpan.metacpan.org/authors/id/A/AT/ATOOMIC/perl-5.35.8.tar.gz',
+  '5.36.0'  => 'https://cpan.metacpan.org/authors/id/R/RJ/RJBS/perl-5.36.0.tar.gz',
+  '5.37.0'  => 'https://cpan.metacpan.org/authors/id/R/RJ/RJBS/perl-5.37.0.tar.gz',
 );
 
 # build the Dockerfiles for the base images
@@ -70,7 +72,7 @@ my %perl_sources = (
   }
 
   my %fedora = (
-    fedora => [ 35 ],
+    fedora => [ 36 ],
     centos => [ 7 ],
   );
 
@@ -91,7 +93,7 @@ my %perl_sources = (
   }
 
   my %alpine = (
-    alpine => [ '3.14' ],
+    alpine => [ '3.16' ],
   );
   foreach my $dist (sort keys %alpine)
   {
@@ -244,7 +246,7 @@ foreach my $flag (qw( threads longdouble quadmath ))
 foreach my $perl_version ($latest_stable)
 {
 
-  foreach my $dist_release (qw( focal bionic buster bullseye bullseye-arm64v8 buster32 bullseye32 xenial centos7 fedora35  ))
+  foreach my $dist_release (qw( focal bionic buster bullseye bullseye-arm64v8 buster32 bullseye32 xenial centos7 fedora36  ))
   {
     my $tag = "$perl_version-$dist_release";
     my @aliases;
@@ -259,7 +261,7 @@ foreach my $perl_version ($latest_stable)
     );
   }
 
-  foreach my $dist_release (qw( alpine3.14 ))
+  foreach my $dist_release (qw( alpine3.16 ))
   {
     my $tag = "$perl_version-$dist_release-threads";
     my @aliases;
