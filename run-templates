@@ -13,7 +13,7 @@ my $tt = Template->new;
 my $stable        = 'bullseye';
 my $stable32      = 'bullseye32';
 my $latest_stable = '5.36.0';
-my $latest_dev    = '5.37.0';
+my $latest_dev    = '5.37.2';
 
 my %perl_sources = (
   '5.28.1'  => 'https://cpan.metacpan.org/authors/id/S/SH/SHAY/perl-5.28.1.tar.gz',
@@ -41,6 +41,7 @@ my %perl_sources = (
   '5.35.8'  => 'https://cpan.metacpan.org/authors/id/A/AT/ATOOMIC/perl-5.35.8.tar.gz',
   '5.36.0'  => 'https://cpan.metacpan.org/authors/id/R/RJ/RJBS/perl-5.36.0.tar.gz',
   '5.37.0'  => 'https://cpan.metacpan.org/authors/id/R/RJ/RJBS/perl-5.37.0.tar.gz',
+  '5.37.2'  => 'https://cpan.metacpan.org/authors/id/A/AT/ATOOMIC/perl-5.37.2.tar.gz',
 );
 
 # build the Dockerfiles for the base images
