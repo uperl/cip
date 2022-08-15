@@ -27,7 +27,8 @@ RUN echo en_US.UTF-8 UTF-8 >> /etc/locale.gen
 RUN locale-gen
 RUN dpkg-reconfigure locales
 
-RUN cpanm -n Perl::Critic                                      \
+RUN cpanm -n https://cpan.metacpan.org/authors/id/P/PL/PLICEASE/Alien-Build-2.57_01.tar.gz \
+             Perl::Critic                                      \
              Perl::Critic::Community                           \
              YAML                                              \
              Test::EOL                                         \
