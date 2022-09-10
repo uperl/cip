@@ -27,7 +27,7 @@ RUN echo en_US.UTF-8 UTF-8 >> /etc/locale.gen
 RUN locale-gen
 RUN dpkg-reconfigure locales
 
-RUN cpanm -n https://cpan.metacpan.org/authors/id/P/PL/PLICEASE/Alien-Build-2.57_01.tar.gz \
+RUN cpanm -n Alien::Build                                      \
              Perl::Critic                                      \
              Perl::Critic::Community                           \
              YAML                                              \
@@ -43,7 +43,7 @@ RUN cpanm -n https://cpan.metacpan.org/authors/id/P/PL/PLICEASE/Alien-Build-2.57
              Dist::Zilla::Plugin::Meta::Dynamic::Config        \
              Dist::Zilla::Plugin::DynamicPrereqs               \
              Test::Pod::Spelling::CommonMistakes               \
-             Dist::Zilla::PluginBundle::Author::Plicease@2.72  \
+             Dist::Zilla::PluginBundle::Author::Plicease       \
              Dist::Zilla::Plugin::MetaProvides::Package        \
              Dist::Zilla::Plugin::Bootstrap::lib               \
              Alien::Build::Plugin::Decode::SourceForge         \
