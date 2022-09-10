@@ -43,7 +43,7 @@ RUN cpanm -n https://cpan.metacpan.org/authors/id/P/PL/PLICEASE/Alien-Build-2.57
              Dist::Zilla::Plugin::Meta::Dynamic::Config        \
              Dist::Zilla::Plugin::DynamicPrereqs               \
              Test::Pod::Spelling::CommonMistakes               \
-             Dist::Zilla::PluginBundle::Author::Plicease       \
+             Dist::Zilla::PluginBundle::Author::Plicease@2.72  \
              Dist::Zilla::Plugin::MetaProvides::Package        \
              Dist::Zilla::Plugin::Bootstrap::lib               \
              Alien::Build::Plugin::Decode::SourceForge         \
