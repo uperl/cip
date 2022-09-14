@@ -187,6 +187,11 @@ foreach my $perl_version ($latest_dev)
     else
     {
       push @aliases, $perl_version =~ s/\.[0-9]+$//r . "-$dist_release";
+      if($dist_release =~ /arm64/)
+      {
+        push @aliases, $perl_version =~ s/\.[0-9]+$//r . "-arm64";
+        push @aliases, $perl_version . "-arm64";
+      }
     }
     my $rc = 0;
     if($perl_version =~ /-RC[0-9]/)
