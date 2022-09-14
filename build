@@ -9,6 +9,10 @@ fi
 
 export ARCH=$(uname -m)
 
+if [ "$ARCH" = arm64 ]; then
+  ARCH=aarch64
+fi
+
 while [ "x$1" != "x" ]; do
 
   tag=$(echo $1 | sed 's/^.*\///')
