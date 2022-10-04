@@ -481,7 +481,12 @@ case "$command" in
         golang)
           cip sudo bash -c '
             set -ex
-            curl https://go.dev/dl/go1.19.2.linux-amd64.tar.gz -sSf | tar -C /usr/local -zxf -
+            if [ "x$2" == "x" ]; then
+              golangver=1.19.2
+            else
+              golangver="$2"
+            fi
+            curl https://go.dev/dl/go$golangver.linux-amd64.tar.gz -LsSf | tar -C /usr/local -zxf -
             cd /usr/local/bin
             ln -s ../go/bin/* .
           '
