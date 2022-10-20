@@ -1,4 +1,4 @@
-FROM plicease/ciperl-base:bullseye
+FROM plicease/ciperl-base:jammy
 LABEL maintainer="Graham Ollis <plicease@cpan.org>"
 
 RUN apt-get update                                     \
@@ -47,5 +47,5 @@ ENV PKG_CONFIG_PATH /opt/libffi/lib/pkgconfig
 ENV CI true
 ENV CIPSOMETHING true
 ENV CONTINUOUS_INTEGRATION true
-ENV CIPDIST bullseye
+ENV CIPDIST jammy
 ENV ALIEN_DOWNLOAD_RULE digest_or_encrypt

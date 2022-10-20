@@ -321,7 +321,7 @@ foreach my $perl_version ($latest_stable)
 
   # libffi master
   {
-    my $stable = 'jammy';  # debian 11 autoconf is too old
+    my $stable = 'jammy';  # debian 11 autoconf is too old for libffi
     my $tag = "$perl_version-$stable-ffimaster";
     my @aliases;
     push @aliases, "$perl_version-ffimaster";
@@ -336,6 +336,7 @@ foreach my $perl_version ($latest_stable)
 
   # memory debug
   {
+    my $stable = 'jammy';  # debian 11 autoconf is too old for libffi
     my $tag = "$perl_version-$stable-debug";
     my @aliases;
     push @aliases, "$perl_version-debug";
@@ -352,23 +353,25 @@ foreach my $perl_version ($latest_stable)
     );
   }
 
-  # memory debug32
-  {
-    my $tag = "$perl_version-$stable32-debug32";
-    my @aliases;
-    push @aliases, "$perl_version-debug32";
-    push @aliases, ($perl_version =~ s/\.[0-9]+$//r) . "-$stable32-debug32";
-    push @aliases, ($perl_version =~ s/\.[0-9]+$//r) . "-debug32";
-    generate_dockerfile($tag, \@aliases,
-      dist_release => $stable32,
-      perl_version => $perl_version,
-      perl_flags   => '-DDEBUGGING -Doptimize=-g3 -Accflags="-DDEBUG_LEAKING_SCALARS"',
-      packages => {
-        debian => 'valgrind',
-      },
-      ffimaster    => 1,
-    );
-  }
+  # autoconf on libffi is too old on Debian 11 and Ubuntu doesn't have a 32 bit
+  # version, so we will wait until Debian 12 comes out?
+  ## memory debug32
+  #{
+  #  my $tag = "$perl_version-$stable32-debug32";
+  #  my @aliases;
+  #  push @aliases, "$perl_version-debug32";
+  #  push @aliases, ($perl_version =~ s/\.[0-9]+$//r) . "-$stable32-debug32";
+  #  push @aliases, ($perl_version =~ s/\.[0-9]+$//r) . "-debug32";
+  #  generate_dockerfile($tag, \@aliases,
+  #    dist_release => $stable32,
+  #    perl_version => $perl_version,
+  #    perl_flags   => '-DDEBUGGING -Doptimize=-g3 -Accflags="-DDEBUG_LEAKING_SCALARS"',
+  #    packages => {
+  #      debian => 'valgrind',
+  #    },
+  #    ffimaster    => 1,
+  #  );
+  #}
 }
 
 # default
