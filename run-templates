@@ -54,7 +54,7 @@ my %perl_sources = (
     'i386/debian'    => [ qw( buster32 bullseye32 ) ],
     'arm64v8/debian' => [ qw( bullseye-arm64v8 ) ],
     'debian'         => [ qw( buster bullseye ) ],
-    'ubuntu'         => [ qw( xenial bionic focal ) ],
+    'ubuntu'         => [ qw( xenial bionic focal jammy ) ],
   );
   my %extra = (
   );
@@ -286,7 +286,7 @@ foreach my $flag (qw( threads longdouble quadmath ))
 foreach my $perl_version ($latest_stable)
 {
 
-  foreach my $dist_release (qw( focal bionic buster bullseye buster32 bullseye32 xenial centos7 fedora36  ))
+  foreach my $dist_release (qw( jammy focal bionic buster bullseye buster32 bullseye32 xenial centos7 fedora36  ))
   {
     my $tag = "$perl_version-$dist_release";
     my @aliases;
