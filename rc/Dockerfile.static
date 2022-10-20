@@ -27,7 +27,7 @@ RUN echo en_US.UTF-8 UTF-8 >> /etc/locale.gen
 RUN locale-gen
 RUN dpkg-reconfigure locales
 
-RUN cpanm -n Alien::Build@2.71                                 \
+RUN cpanm -n Alien::Build                                      \
              Perl::Critic                                      \
              Perl::Critic::Community                           \
              YAML                                              \
@@ -67,8 +67,9 @@ RUN cpanm -n Alien::Build@2.71                                 \
              Dist::Zilla::Plugin::Prereqs::Soften              \
              Alien::Build::Plugin::Download::GitHub            \
              Alien::Build::Plugin::Download::GitLab            \
+             Test::Spelling                                    \
              https://dist.wdlabs.com/Test-SpellCheck-Plugin-Lang-EN-US-0.01.tar.gz \
-             https://dist.wdlabs.com/Test-Spelling-0.20.tar.gz && rm -fr ~/.cpanm
+             && rm -fr ~/.cpanm
 
 # don't include Test::Strict, because it requires XS modules to be built
 #RUN cpanm -n Test::Strict
