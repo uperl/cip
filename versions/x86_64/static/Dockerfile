@@ -42,8 +42,8 @@ RUN cpanm -n Alien::Build                                      \
              Dist::Zilla::Plugin::AlienBase::Wrapper::Bundle   \
              Dist::Zilla::Plugin::Meta::Dynamic::Config        \
              Dist::Zilla::Plugin::DynamicPrereqs               \
-             Test::Pod::Spelling::CommonMistakes               \
              Dist::Zilla::PluginBundle::Author::Plicease       \
+             Test::Pod::Spelling::CommonMistakes               \
              Dist::Zilla::Plugin::MetaProvides::Package        \
              Dist::Zilla::Plugin::Bootstrap::lib               \
              Alien::Build::Plugin::Decode::SourceForge         \
