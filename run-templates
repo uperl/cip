@@ -13,8 +13,8 @@ my $tt = Template->new;
 my $stable        = 'bullseye';
 my $stable32      = 'bullseye32';
 my $stable_arm64  = 'bullseye-arm64v8';
-my $latest_stable = '5.36.0';
-my $latest_dev    = '5.37.8';
+my $latest_stable = '5.38.2';
+my $latest_dev    = '5.39.7';
 
 my %perl_sources = (
   '5.28.1'  => 'https://cpan.metacpan.org/authors/id/S/SH/SHAY/perl-5.28.1.tar.gz',
@@ -47,6 +47,8 @@ my %perl_sources = (
   '5.37.5'  => 'https://cpan.metacpan.org/authors/id/T/TO/TODDR/perl-5.37.5.tar.gz',
   '5.37.6'  => 'https://cpan.metacpan.org/authors/id/C/CO/CORION/perl-5.37.6.tar.gz',
   '5.37.8'  => 'https://cpan.metacpan.org/authors/id/R/RE/RENEEB/perl-5.37.8.tar.gz',
+  '5.38.2'  => 'https://cpan.metacpan.org/authors/id/P/PE/PEVANS/perl-5.38.2.tar.gz',
+  '5.39.7'  => 'https://cpan.metacpan.org/authors/id/C/CO/CORION/perl-5.39.7.tar.gz',
 );
 
 # build the Dockerfiles for the base images
@@ -150,7 +152,7 @@ sub generate_dockerfile ($tag, $aliases, %vars)
   close $fh;
 }
 
-foreach my $perl_version ($latest_stable, qw( 5.34.1 5.32.1 5.30.3 5.28.2 5.26.3 5.24.4 ))
+foreach my $perl_version ($latest_stable, qw( 5.36.3 5.34.3 5.32.1 5.30.3 5.28.2 5.26.3 5.24.4 ))
 {
   foreach my $dist_release ($stable, $stable_arm64)
   {
