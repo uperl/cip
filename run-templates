@@ -82,7 +82,6 @@ my %perl_sources = (
 
   my %fedora = (
     fedora => [ 36 ],
-    centos => [ 7 ],
   );
 
   foreach my $dist (sort keys %fedora)
@@ -291,13 +290,13 @@ foreach my $flag (qw( threads longdouble quadmath ))
 foreach my $perl_version ($latest_stable)
 {
 
-  foreach my $dist_release (qw( jammy focal bionic buster bullseye buster32 bullseye32 xenial centos7 fedora36 ))
+  foreach my $dist_release (qw( jammy focal bionic buster bullseye buster32 bullseye32 xenial fedora36 ))
   {
     my $tag = "$perl_version-$dist_release";
     my @aliases;
     push @aliases, ($perl_version =~ s/\.[0-9]+$//r) . "-$dist_release";
     my $no_perl = 0;
-    $no_perl = 1 if $dist_release =~ /^(fedora|centos)/;
+    $no_perl = 1 if $dist_release =~ /^(fedora)/;
     generate_dockerfile($tag, \@aliases,
       no_perl      => $no_perl,
       dist_release => $dist_release,
