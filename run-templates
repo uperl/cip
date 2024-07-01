@@ -10,9 +10,9 @@ use File::chdir;
 use Path::Tiny qw( path );
 
 my $tt = Template->new;
-my $stable        = 'bullseye';
-my $stable32      = 'bullseye32';
-my $stable_arm64  = 'bullseye-arm64v8';
+my $stable        = 'bookworm';
+my $stable32      = 'bookworm32';
+my $stable_arm64  = 'bookworm-arm64v8';
 my $latest_stable = '5.40.0';
 my $latest_dev    = '5.39.7';
 
@@ -56,9 +56,9 @@ my %perl_sources = (
 {
   my $arch = 'x86_64';
   my %deb = (
-    'i386/debian'    => [ qw( buster32 bullseye32 ) ],
-    'arm64v8/debian' => [ qw( bullseye-arm64v8 ) ],
-    'debian'         => [ qw( buster bullseye ) ],
+    'i386/debian'    => [ qw( bookworm32 ) ],
+    'arm64v8/debian' => [ qw( bookworm-arm64v8 ) ],
+    'debian'         => [ qw( bookworm ) ],
     'ubuntu'         => [ qw( xenial bionic focal jammy ) ],
   );
   my %extra = (
@@ -81,7 +81,7 @@ my %perl_sources = (
   }
 
   my %fedora = (
-    fedora => [ 36 ],
+    fedora => [ 40 ],
   );
 
   foreach my $dist (sort keys %fedora)
@@ -101,7 +101,7 @@ my %perl_sources = (
   }
 
   my %alpine = (
-    alpine => [ '3.16' ],
+    alpine => [ '3.20.1' ],
   );
   foreach my $dist (sort keys %alpine)
   {
@@ -290,7 +290,7 @@ foreach my $flag (qw( threads longdouble quadmath ))
 foreach my $perl_version ($latest_stable)
 {
 
-  foreach my $dist_release (qw( jammy focal bionic buster bullseye buster32 bullseye32 xenial fedora36 ))
+  foreach my $dist_release (qw( jammy focal bionic bookworm bookworm32 xenial fedora40 ))
   {
     my $tag = "$perl_version-$dist_release";
     my @aliases;
@@ -305,7 +305,7 @@ foreach my $perl_version ($latest_stable)
     );
   }
 
-  foreach my $dist_release (qw( alpine3.16 ))
+  foreach my $dist_release (qw( alpine3.20.1 ))
   {
     my $tag = "$perl_version-$dist_release-threads";
     my @aliases;
