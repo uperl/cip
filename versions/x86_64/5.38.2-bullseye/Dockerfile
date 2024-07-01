@@ -1,7 +1,7 @@
 FROM plicease/ciperl-base:bullseye
 LABEL maintainer="Graham Ollis <plicease@cpan.org>"
 
-RUN curl https://raw.githubusercontent.com/tokuhirom/Perl-Build/master/perl-build | perl - https://cpan.metacpan.org/authors/id/P/PE/PEVANS/perl-5.38.2.tar.gz /opt/perl/5.38.2/
+RUN curl https://raw.githubusercontent.com/tokuhirom/Perl-Build/master/perl-build | perl - 5.38.2 /opt/perl/5.38.2/
 
 RUN curl https://cpanmin.us | /opt/perl/5.38.2/bin/perl - App::cpanminus && rm -rf ~/.cpanm
 
