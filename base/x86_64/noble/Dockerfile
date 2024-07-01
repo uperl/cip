@@ -1,4 +1,4 @@
-FROM [% dist %]:[% dist_release %][% IF dist.match('debian') %]-slim[% END %]
+FROM ubuntu:noble
 LABEL maintainer="Graham Ollis <plicease@cpan.org>"
 
 ENV DEBIAN_FRONTEND noninteractive
@@ -40,9 +40,7 @@ WORKDIR /work
 CMD tcsh
 
 
-[%- IF dist_release.match('noble') %]
 RUN userdel ubuntu
-[% END -%]
 RUN groupadd -g 1000 cip
 RUN useradd -u 1000 -g 1000 -m -s /bin/tcsh cip
 ADD --chown=1000:1000 rc/dot.cshrc /home/cip/.cshrc
