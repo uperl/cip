@@ -13,8 +13,8 @@ my $tt = Template->new;
 my $stable        = 'bookworm';
 my $stable32      = 'bookworm32';
 my $stable_arm64  = 'bookworm-arm64v8';
-my $latest_stable = '5.41.1';
-my $latest_dev    = '5.39.7';
+my $latest_stable = '5.40.0';
+my $latest_dev    = '5.41.1';
 
 my %perl_sources = (
   '5.28.1'  => 'https://cpan.metacpan.org/authors/id/S/SH/SHAY/perl-5.28.1.tar.gz',
