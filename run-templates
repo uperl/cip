@@ -13,7 +13,7 @@ my $tt = Template->new;
 my $stable        = 'bookworm';
 my $stable32      = 'bookworm32';
 my $stable_arm64  = 'bookworm-arm64v8';
-my $latest_stable = '5.40.0';
+my $latest_stable = '5.41.1';
 my $latest_dev    = '5.39.7';
 
 my %perl_sources = (
@@ -50,6 +50,7 @@ my %perl_sources = (
   '5.38.2'  => 'https://cpan.metacpan.org/authors/id/P/PE/PEVANS/perl-5.38.2.tar.gz',
   '5.39.7'  => 'https://cpan.metacpan.org/authors/id/C/CO/CORION/perl-5.39.7.tar.gz',
   '5.40.0'  => 'https://cpan.metacpan.org/authors/id/H/HA/HAARG/perl-5.40.0.tar.gz',
+  '5.41.1'  => 'https://cpan.metacpan.org/authors/id/B/BO/BOOK/perl-5.41.1.tar.gz',
 );
 
 # build the Dockerfiles for the base images
