@@ -20,12 +20,10 @@ subcommands:
 
   cip config
   cip config-alien
-    - generate a .travis.yml and .github/workflow/linux.yml that uses cip
+    - generate a .github/workflow/linux.yml that uses cip
 
   cip login
   cip start
-  cip before_install
-  cip before-install
     - start background container
 
   cip diag
@@ -136,7 +134,7 @@ case "$command" in
     else
       mkdir -p ~/.cip/install-cache/$CIP_TAG ~/.cip/dzil-cache/$CIP_TAG
     fi
-    if [ "x$TRAVIS" == "xtrue" ] || [ "x$GITHUB_ACTIONS" == "xtrue" ]; then
+    if [ "x$GITHUB_ACTIONS" == "xtrue" ]; then
       if ! [ -e /tmp/cip-chmod-fixup ]; then
         find ~/.cip/dzil-cache    -print0 | xargs -0 -L 300 sudo chown -R 1000:1000
         find ~/.cip/install-cache -print0 | xargs -0 -L 300 sudo chown -R 1000:1000
@@ -229,37 +227,6 @@ case "$command" in
       sleep 86400
     ;;
 
-  before_install|before-install)
-    if [ "x$TRAVIS" != "xtrue" ]; then
-      echo "before-install is legacy command for travis-ci only"
-      false
-    fi
-    if [ "$CIP_TAG" == "static" ]; then
-      echo no before-install for static
-      exit
-    fi
-    cip start
-    case "$command" in
-      before_install|before-install)
-        echo "+docker version"
-        docker version
-        echo "+docker image ls"
-        docker image ls
-        echo "+docker ps"
-        docker ps
-      ;;
-    esac
-    # TODO: this works around the fact that the minor version (the y in 5.x.y)
-    # may have changed and we may have a cached local::lib.  It's possible that
-    # there may be a breaking change between minor versions in a dev release
-    # so it would be better to detect that change and clear the cache.
-    cip bash -c 'id'
-    cip bash -c 'curl https://cpanmin.us | perl - -n --reinstall App::cpanminus'
-    if [ -f maint/cip-before-install ]; then
-      ./maint/cip-before-install
-    fi
-    ;;
-
   diag)
     if [ "$CIP_TAG" == "static" ]; then
       docker run --rm plicease/ciperl:$CIP_TAG perl -V
@@ -274,11 +241,9 @@ case "$command" in
       echo no install for static
       exit
     fi
-    if [ "x$TRAVIS" != "xtrue" ]; then
-      cip bash -c 'curl https://cpanmin.us | perl - -n --reinstall App::cpanminus'
-      if [ -f maint/cip-before-install ]; then
-        ./maint/cip-before-install
-      fi
+    cip bash -c 'curl https://cpanmin.us | perl - -n --reinstall App::cpanminus'
+    if [ -f maint/cip-before-install ]; then
+      ./maint/cip-before-install
     fi
     cip_local_lib
     if [ -f maint/cip-install ]; then
