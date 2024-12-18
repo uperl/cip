@@ -500,7 +500,7 @@ case "$command" in
             cd /opt/v
             make
             cd /usr/local/bin
-            ln -s /opt/v
+            ln -s /opt/v/v
           '
           ;;
 
