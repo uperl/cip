@@ -492,11 +492,11 @@ case "$command" in
           '
           ;;
 
-        v)
-          git clone https://github.com/vlang/v.git
+        vlang)
           cip sudo bash -c '
             set -ex
-            mv v /opt/v
+            apt-get update && apt-get install git
+            git clone https://github.com/vlang/v.git /opt/v
             cd /opt/v
             make
             cd /usr/local/bin
