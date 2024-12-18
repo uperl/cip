@@ -492,6 +492,18 @@ case "$command" in
           '
           ;;
 
+        v)
+          git clone https://github.com/vlang/v.git
+          cip sudo bash -c '
+            set -ex
+            mv v /opt/v
+            cd /opt/v
+            make
+            cd /usr/local/bin
+            ln -s /opt/v
+          '
+          ;;
+
         *)
           cip sudo bash -c "
             set -ex
