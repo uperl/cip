@@ -221,7 +221,6 @@ case "$command" in
       -v ~/.cip:/home/cip/.cip \
       -v ~/.cip/install-cache/"$CIP_TAG":/home/cip/perl5 \
       -v ~/.cip/dzil-cache/"$CIP_TAG":/home/cip/dzil \
-      --tmpfs /tmp \
       -d \
       plicease/ciperl:$CIP_TAG \
       sleep 86400
