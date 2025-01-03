@@ -68,10 +68,12 @@ RUN cpanm -n Alien::Build                                      \
              Alien::Build::Plugin::Download::GitHub            \
              Alien::Build::Plugin::Download::GitLab            \
              Test::Spelling                                    \
-             https://dist.wdlabs.com/Test-SpellCheck-Plugin-Lang-EN-US-0.01.tar.gz \
+             Dist::Zilla::Plugin::ContributorsFromGit          \
+             Test::SpellCheck                                  \
              && rm -fr ~/.cpanm
 
 # don't include Test::Strict, because it requires XS modules to be built
 #RUN cpanm -n Test::Strict
 
 RUN perl -npE 's/use warnings;/no warnings;/' /opt/dzil/lib/perl5/Pod/Spell.pm > /opt/dzil/lib/perl5/Pod/Spell.pm.nowarn && mv /opt/dzil/lib/perl5/Pod/Spell.pm.nowarn /opt/dzil/lib/perl5/Pod/Spell.pm
+
